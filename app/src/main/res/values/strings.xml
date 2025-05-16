@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Avalia+</string>
+    <string name="title_activity_tela_login">telaLogin</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_topicos">Tópicos</string>
+    <string name="title_provas">Provas</string>
+    <string name="title_licoes">Lições</string>
+</resources>

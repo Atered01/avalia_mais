@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:background="#E6E6E6"
+    android:id="@+id/telaCadastro">
+
+    <!-- Título do App -->
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AVALIA+"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp" />
+
+    <!-- Subtítulo Cadastro -->
+    <TextView
+        android:id="@+id/tvCadastro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cadastro"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="30dp" />
+
+    <!-- Nome Completo -->
+    <EditText
+        android:id="@+id/txtCadNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite seu nome completo:"
+        android:drawableStart="@android:drawable/ic_menu_myplaces"
+        android:padding="10dp"
+        android:background="@android:drawable/edit_text" />
+
+    <!-- Data de Nascimento -->
+    <EditText
+        android:id="@+id/txtCadNascimento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite sua data de nascimento:"
+        android:drawableStart="@android:drawable/ic_menu_month"
+        android:inputType="date"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:drawable/edit_text" />
+
+    <!-- CPF -->
+    <EditText
+        android:id="@+id/txtCadCpf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite seu CPF:"
+        android:drawableStart="@android:drawable/ic_menu_info_details"
+        android:inputType="number"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:drawable/edit_text" />
+
+    <!-- Email -->
+    <EditText
+        android:id="@+id/txtCadEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite seu email:"
+        android:drawableStart="@android:drawable/ic_dialog_email"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:drawable/edit_text" />
+
+    <!-- Senha -->
+    <EditText
+        android:id="@+id/txtCadSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Digite sua senha:"
+        android:drawableStart="@android:drawable/ic_lock_lock"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:drawable/edit_text" />
+
+    <!-- Repetir Senha -->
+    <EditText
+        android:id="@+id/txtCadRepetirSenha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Repita sua senha:"
+        android:drawableStart="@android:drawable/ic_lock_lock"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:drawable/edit_text" />
+
+    <!-- Botão Cadastrar -->
+    <Button
+        android:id="@+id/btCadastrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CADASTRAR"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#001D83"
+        android:layout_marginTop="30dp"
+        android:padding="12dp"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Link para Login -->
+    <TextView
+        android:id="@+id/txtLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Já possui uma conta? Faça o login"
+        android:textSize="14sp"
+        android:textColor="#000000"
+        android:layout_marginTop="10dp" />
+
+</LinearLayout>
