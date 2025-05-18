@@ -11,7 +11,6 @@
 
     <!-- Título do App -->
     <TextView
-        android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AVALIA+"
@@ -22,7 +21,6 @@
 
     <!-- Subtítulo Login -->
     <TextView
-        android:id="@+id/tvLoginTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
@@ -32,7 +30,7 @@
 
     <!-- Campo Email -->
     <EditText
-        android:id="@+id/etEmail"
+        android:id="@+id/txtEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Digite seu email:"
@@ -43,7 +41,7 @@
 
     <!-- Campo Senha -->
     <EditText
-        android:id="@+id/etSenha"
+        android:id="@+id/txtSenha"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Digite sua senha:"
@@ -74,7 +72,7 @@
             android:layout_weight="1" />
 
         <TextView
-            android:id="@+id/tvEsqueceuSenha"
+            android:id="@+id/txtEsqueceuSenha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Esqueceu a senha?"
@@ -84,7 +82,7 @@
 
     <!-- Botão Entrar -->
     <Button
-        android:id="@+id/btnEntrar"
+        android:id="@+id/btEntrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="ENTRAR"
@@ -96,7 +94,7 @@
 
     <!-- Link para Cadastro -->
     <TextView
-        android:id="@+id/tvCadastro"
+        android:id="@+id/txtCadastro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ainda não tenha conta? Cadastre-se"

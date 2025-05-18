@@ -16,13 +16,6 @@
             android:name=".telaHome"
             android:exported="false" />
         <activity
-            android:name=".telaLogin"
-            android:exported="false"
-            android:label="@string/title_activity_tela_login" />
-        <activity
-            android:name=".TelaInicial"
-            android:exported="false" />
-        <activity
             android:name=".TelaEsqueceuSenha"
             android:exported="false" />
         <activity

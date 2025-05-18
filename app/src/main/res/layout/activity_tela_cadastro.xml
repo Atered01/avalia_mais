@@ -11,7 +11,6 @@
 
     <!-- Título do App -->
     <TextView
-        android:id="@+id/tvTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AVALIA+"
@@ -22,7 +21,6 @@
 
     <!-- Subtítulo Cadastro -->
     <TextView
-        android:id="@+id/tvCadastro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cadastro"
