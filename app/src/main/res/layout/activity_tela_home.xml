@@ -9,7 +9,6 @@
     android:background="#FFFFFF"
     android:id="@+id/telaHome">
 
-    <!-- Texto de boas-vindas -->
     <TextView
         android:id="@+id/text_welcome"
         android:layout_width="match_parent"
@@ -21,7 +20,6 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp" />
 
-    <!-- Foto do usuário (simulado com um quadrado) -->
     <ImageView
         android:id="@+id/user_photo"
         android:layout_width="120dp"
@@ -32,7 +30,6 @@
         android:background="@android:color/darker_gray"
         android:layout_marginBottom="16dp" />
 
-    <!-- Frase motivadora -->
     <TextView
         android:id="@+id/text_motivacional"
         android:layout_width="match_parent"
@@ -44,7 +41,6 @@
         android:textColor="#555555"
         android:layout_marginBottom="16dp" />
 
-    <!-- Card com lições pendentes -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -68,13 +64,11 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Espaço flexível -->
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- Barra inferior com botões horizontais -->
     <LinearLayout
         android:id="@+id/bottom_buttons"
         android:layout_width="match_parent"
@@ -85,34 +79,34 @@
         android:weightSum="5">
 
         <Button
-            android:layout_width="0dp"
+            android:id="@+id/buttonHome" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Home" />
 
         <Button
-            android:layout_width="0dp"
+            android:id="@+id/buttonLicoes" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Lições" />
 
         <Button
-            android:layout_width="0dp"
+            android:id="@+id/buttonProvas" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Provas" />
 
         <Button
-            android:layout_width="0dp"
+            android:id="@+id/buttonTopicos" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="Tópicos" />
 
         <Button
-            android:layout_width="0dp"
+            android:id="@+id/buttonRanking" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Dashboard" />
+            android:text="Ranking" />
     </LinearLayout>
 
 </LinearLayout>
