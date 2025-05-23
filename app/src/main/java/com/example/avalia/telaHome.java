@@ -50,7 +50,7 @@ public class telaHome extends AppCompatActivity {
         buttonLicoes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mostrarDialogoSelecaoArea(); // Chama o método para exibir o diálogo
+                mostrarDialogoSelecaoArea(); // Chama o metodo para exibir o diálogo
             }
         });
 

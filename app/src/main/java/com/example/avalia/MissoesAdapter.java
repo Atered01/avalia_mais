@@ -115,7 +115,7 @@ public class MissoesAdapter extends RecyclerView.Adapter<MissoesAdapter.MissaoVi
         }
     }
 
-    // Método para atualizar a lista de missões, se necessário (ex: após carregar do banco)
+    // Metodo para atualizar a lista de missões, se necessário (ex: após carregar do banco)
     public void atualizarLista(List<Missao> novasMissoes) {
         this.listaMissoes.clear();
         if (novasMissoes != null) {
@@ -124,7 +124,7 @@ public class MissoesAdapter extends RecyclerView.Adapter<MissoesAdapter.MissaoVi
         notifyDataSetChanged(); // Notifica o RecyclerView que os dados mudaram para ele redesenhar
     }
 
-    // Método para adicionar uma única missão (pode ser útil)
+    // Metodo para adicionar uma única missão (pode ser útil)
     public void adicionarMissao(Missao missao) {
         if (this.listaMissoes != null && missao != null) {
             this.listaMissoes.add(missao);
@@ -132,7 +132,7 @@ public class MissoesAdapter extends RecyclerView.Adapter<MissoesAdapter.MissaoVi
         }
     }
 
-    // Método para remover uma missão (pode ser útil)
+    // Metodo para remover uma missão (pode ser útil)
     public void removerMissao(int position) {
         if (this.listaMissoes != null && position >= 0 && position < this.listaMissoes.size()) {
             this.listaMissoes.remove(position);

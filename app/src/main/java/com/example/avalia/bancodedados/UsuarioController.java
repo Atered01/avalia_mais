@@ -34,7 +34,7 @@ public class UsuarioController {
 
     public long adicionarUsuario(String nomeCompleto, String email, String senhaNaoHasheada, String dataNascimento, String cpf) {
         ContentValues values = new ContentValues();
-        // MUDANÇA: Chama o método estático de BancoDeDados
+        // MUDANÇA: Chama o metodo estático de BancoDeDados
         String senhaHasheada = BancoDeDados.hashPassword(senhaNaoHasheada);
         if (senhaHasheada == null) {
             Log.e(TAG_LOG, "Falha ao gerar hash da senha para: " + email);
@@ -44,7 +44,7 @@ public class UsuarioController {
         values.put(com.example.avalia.bancodedados.DatabaseContract.UserEntry.COLUMN_NAME_NOME_COMPLETO, nomeCompleto);
         values.put(com.example.avalia.bancodedados.DatabaseContract.UserEntry.COLUMN_NAME_EMAIL, email.toLowerCase());
         values.put(com.example.avalia.bancodedados.DatabaseContract.UserEntry.COLUMN_NAME_SENHA_HASH, senhaHasheada);
-        // MUDANÇA: Chama o método estático de BancoDeDados
+        // MUDANÇA: Chama o metodo estático de BancoDeDados
         values.put(com.example.avalia.bancodedados.DatabaseContract.UserEntry.COLUMN_NAME_DATA_CADASTRO, BancoDeDados.getCurrentDateTime());
         values.put(com.example.avalia.bancodedados.DatabaseContract.UserEntry.COLUMN_NAME_DATA_NASCIMENTO, dataNascimento);
         values.put(com.example.avalia.bancodedados.DatabaseContract.UserEntry.COLUMN_NAME_CPF, cpf);
@@ -84,7 +84,7 @@ public class UsuarioController {
     }
 
     public Usuario verificarLogin(String email, String senhaNaoHasheada) {
-        // MUDANÇA: Chama o método estático de BancoDeDados
+        // MUDANÇA: Chama o metodo estático de BancoDeDados
         String senhaHasheada = BancoDeDados.hashPassword(senhaNaoHasheada);
         if (senhaHasheada == null) {
             Log.e(TAG_LOG, "Falha ao gerar hash da senha para login: " + email);
