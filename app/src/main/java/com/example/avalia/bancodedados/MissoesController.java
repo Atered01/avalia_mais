@@ -1,4 +1,4 @@
-package com.example.avalia.bancodedados;
+package com.example.avalia.bancodedados; // Verifique se este é o pacote correto
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,21 +7,20 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-
+import com.example.avalia.bancodedados.BancoDeDados; // Importe a classe BancoDeDados correta
 import com.example.avalia.bancodedados.DatabaseContract;
 import com.example.avalia.Missao;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MissoesController {
     private SQLiteDatabase database;
-    private com.example.avalia.bancodedados.BancoDeDados dbHelper; // MUDANÇA: Agora usa BancoDeDados (o SQLiteOpenHelper)
-    private static final String TAG_LOG = "MissoesController"; // Tag de Log atualizada
+    private BancoDeDados dbHelper; // Usa a classe BancoDeDados (seu SQLiteOpenHelper)
+    private static final String TAG_LOG = "MissoesController";
 
     public MissoesController(Context context) {
-        dbHelper = new com.example.avalia.bancodedados.BancoDeDados(context); // MUDANÇA: Instancia BancoDeDados
+        dbHelper = new BancoDeDados(context);
     }
 
     public void open() throws SQLException {
@@ -30,8 +29,10 @@ public class MissoesController {
     }
 
     public void close() {
-        dbHelper.close();
-        Log.d(TAG_LOG, "Banco de dados fechado.");
+        if (database != null && database.isOpen()) { // Adiciona verificação
+            dbHelper.close(); // O SQLiteOpenHelper gerencia o fechamento real do SQLiteDatabase
+            Log.d(TAG_LOG, "Banco de dados fechado.");
+        }
     }
 
     public List<Missao> getMissoesPorArea(String areaConhecimento) {
@@ -42,7 +43,8 @@ public class MissoesController {
                 DatabaseContract.MissaoEntry.COLUMN_NAME_DESCRICAO,
                 DatabaseContract.MissaoEntry.COLUMN_NAME_PONTOS,
                 DatabaseContract.MissaoEntry.COLUMN_NAME_CONCLUIDA,
-                DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO
+                DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO,
+                DatabaseContract.MissaoEntry.COLUMN_NAME_ICON_RESOURCE_ID // ADICIONAR À PROJEÇÃO
         };
 
         String selection = DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO + " = ?";
@@ -65,9 +67,15 @@ public class MissoesController {
                 int pontos = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.MissaoEntry.COLUMN_NAME_PONTOS));
                 boolean concluida = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.MissaoEntry.COLUMN_NAME_CONCLUIDA)) == 1;
                 String area = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO));
+                // LENDO O ICON RESOURCE ID DO CURSOR
                 int iconId = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.MissaoEntry.COLUMN_NAME_ICON_RESOURCE_ID));
+
+                // USANDO O CONSTRUTOR DE Missao COM 7 ARGUMENTOS
                 listaMissoes.add(new Missao(dbId, idOriginal, descricao, pontos, concluida, area, iconId));
             }
+        } catch (IllegalArgumentException e) {
+            // Este catch é para o caso de getColumnIndexOrThrow falhar, como no seu erro original.
+            Log.e(TAG_LOG, "Erro ao ler coluna do cursor: " + e.getMessage());
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -78,6 +86,7 @@ public class MissoesController {
     }
 
     public int updateStatusMissao(long dbIdMissao, boolean concluida) {
+        // ... (sem mudanças neste metodo para o bug atual) ...
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.MissaoEntry.COLUMN_NAME_CONCLUIDA, concluida ? 1 : 0);
 

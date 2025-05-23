@@ -2,13 +2,10 @@ package com.example.avalia.bancodedados;
 
 import android.provider.BaseColumns;
 
-// MUDANÇA: Nome da classe alterado de MissoesContract para DatabaseContract
 public final class DatabaseContract {
 
-    // Construtor privado para prevenir instanciação
     private DatabaseContract() {}
 
-    /* Classe interna que define o conteúdo da tabela de missões */
     public static class MissaoEntry implements BaseColumns {
         public static final String TABLE_NAME = "missoes";
         public static final String COLUMN_NAME_ID_ORIGINAL = "id_original";
@@ -16,11 +13,9 @@ public final class DatabaseContract {
         public static final String COLUMN_NAME_PONTOS = "pontos";
         public static final String COLUMN_NAME_CONCLUIDA = "concluida";
         public static final String COLUMN_NAME_AREA_CONHECIMENTO = "area_conhecimento";
-        public static final String COLUMN_NAME_ICON_RESOURCE_ID = "icon_resource_id";
-        // Futuramente: public static final String COLUMN_NAME_ID_USUARIO = "id_usuario";
+        public static final String COLUMN_NAME_ICON_RESOURCE_ID = "icon_resource_id"; // INTEGER
     }
 
-    /* Classe interna que define o conteúdo da tabela de usuários */
     public static class UserEntry implements BaseColumns {
         public static final String TABLE_NAME = "usuarios";
         public static final String COLUMN_NAME_NOME_COMPLETO = "nome_completo";
@@ -30,7 +25,4 @@ public final class DatabaseContract {
         public static final String COLUMN_NAME_DATA_NASCIMENTO = "data_nascimento";
         public static final String COLUMN_NAME_CPF = "cpf";
     }
-
-    // Se você adicionar mais tabelas no futuro, crie novas classes Entry aqui dentro.
-    // Ex: public static class ProvaEntry implements BaseColumns { ... }
 }
