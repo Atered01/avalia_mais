@@ -1,5 +1,10 @@
+import java.util.Properties // Adicione esta linha
+import java.io.FileInputStream // Adicione esta linha
+
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+
 }
 
 android {
@@ -8,44 +13,62 @@ android {
 
     defaultConfig {
         applicationId = "com.example.avalia"
-        minSdk = 24
-        targetSdk = 35
+        minSdk = 28
+        targetSdk = 35 // Considere usar 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        val localPropertiesFile = project.rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            try {
+                properties.load(FileInputStream(localPropertiesFile))
+            } catch (e: Exception) {
+                println("Warning: Could not load local.properties: ${e.message}")
+            }
+        }
+        buildConfigField(
+            "String",
+            "GEMINI_API_KEY",
+            "\"${properties.getProperty("GEMINI_API_KEY", "")}\""
+        )
+
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding = true
+        buildConfig = true
+    }
+// In your app/build.gradle.kts file
+    dependencies {
+        implementation("org.reactivestreams:reactive-streams:1.0.4")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+        implementation(libs.generativeai) // CORRETO
+        implementation(libs.guava) // Versão estável e suficiente
+        implementation(libs.cardview)
+        implementation(libs.recyclerview)
+        implementation(libs.appcompat)
+        implementation(libs.material)
+        implementation(libs.activity)
+        implementation(libs.constraintlayout)
+        implementation(libs.generativeai)
+        implementation(libs.core.ktx)
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.ext.junit)
+        androidTestImplementation(libs.espresso.core)
     }
 }
-
 dependencies {
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation(libs.lifecycle.process)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.lifecycle.livedata.ktx)
-    implementation(libs.lifecycle.viewmodel.ktx)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 }
