@@ -19,9 +19,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class BancoDeDados extends SQLiteOpenHelper {
-    // ATENÇÃO: Incrementar a versão do banco de dados para forçar o onUpgrade.
-    // Se a última versão funcional era 3 (após adicionar CPF/DataNasc aos usuários),
-    // esta DEVE ser 4.
     public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "MissoesApp.db";
     private static final String TAG_LOG = "BancoDeDados";

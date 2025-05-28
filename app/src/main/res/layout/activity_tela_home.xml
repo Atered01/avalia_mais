@@ -97,10 +97,10 @@
             android:text="Provas" />
 
         <Button
-            android:id="@+id/buttonTopicos" android:layout_width="0dp"
+            android:id="@+id/buttonIa" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Tópicos" />
+            android:text="IA" />
 
         <Button
             android:id="@+id/buttonRanking" android:layout_width="0dp"

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.appcompat.app.AlertDialog; // Import necessário para o diálogo
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -19,7 +19,7 @@ public class telaHome extends AppCompatActivity {
     private TextView textMotivacional;
     // private CardView cardViewLicoes; // Se precisar referenciar o CardView diretamente
     private TextView textLicoes;
-    private Button buttonHome, buttonLicoes, buttonProvas, buttonTopicos, buttonRanking;
+    private Button buttonHome, buttonLicoes, buttonProvas, buttonIa, buttonRanking;
 
     // Nomes das áreas do ENEM (correspondem às chaves no 'bancoDeMissoesPorArea' da TelaMissoesActivity)
     final String[] areasEnem = {
@@ -43,7 +43,7 @@ public class telaHome extends AppCompatActivity {
         buttonHome = findViewById(R.id.buttonHome);
         buttonLicoes = findViewById(R.id.buttonLicoes);
         buttonProvas = findViewById(R.id.buttonProvas);
-        buttonTopicos = findViewById(R.id.buttonTopicos);
+        buttonIa = findViewById(R.id.buttonIa);
         buttonRanking = findViewById(R.id.buttonRanking);
 
         // Configurar o listener para o botão "Lições"
