@@ -15,22 +15,22 @@
         android:theme="@style/Theme.Avalia"
         tools:targetApi="31">
         <activity
-            android:name=".chatBot"
+            android:name=".ChatBot"
             android:exported="false" />
         <activity
-            android:name=".tela_missoes"
+            android:name=".missoes.tela_missoes"
             android:exported="false" />
         <activity
-            android:name=".telaHome"
+            android:name=".TelaHome"
             android:exported="false" />
         <activity
-            android:name=".TelaEsqueceuSenha"
+            android:name=".cadastro.TelaEsqueceuSenha"
             android:exported="false" />
         <activity
-            android:name=".telaCadastro"
+            android:name=".cadastro.TelaCadastro"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".cadastro.TelaLogin"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
