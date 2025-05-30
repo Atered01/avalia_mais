@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:id="@+id/telaProva">
+
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Prova da disciplina"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/txtPergunta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Em que ano acabou a guerra fria?"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp"/>
+
+    <RadioGroup
+        android:id="@+id/grupoAlternativas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/alternativaA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alternativa A - 1980" />
+
+        <RadioButton
+            android:id="@+id/alternativaB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alternativa B - 1790" />
+
+        <RadioButton
+            android:id="@+id/alternativaC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alternativa C - 1989" />
+
+        <RadioButton
+            android:id="@+id/alternativaD"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alternativa D - 1980" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/btnProxima"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Proxima"
+        android:layout_marginTop="24dp"/>
+
+    <TextView
+        android:id="@+id/txtResultado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:textColor="#FF0000"/>
+</LinearLayout>
