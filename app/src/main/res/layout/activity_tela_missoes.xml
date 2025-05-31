@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
-    tools:context=".missoes.tela_missoes"> <TextView
+    tools:context=".missoes.TelaMissoes"> <TextView
     android:id="@+id/textViewTituloTelaMissoes"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             tools:text="Pontuação: 250 pts"
             android:textSize="20sp"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="@color/blueDark"
             android:textStyle="bold"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
@@ -89,7 +89,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         android:text="Voltar"
-        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:backgroundTint="@color/blueDark"
         android:textColor="@android:color/white"/>
 
 </RelativeLayout>

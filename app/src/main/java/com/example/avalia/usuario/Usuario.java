@@ -1,19 +1,22 @@
-package com.example.avalia.cadastro;
+package com.example.avalia.usuario;
 
 public class Usuario {
-    private long id; // _ID do banco de dados SQLite
+    private long id;
     private String nomeCompleto;
     private String email;
-    private String dataNascimento; // Campo para data de nascimento
-    private String cpf;            // Campo para CPF
+    private String dataNascimento;
+    private String cpf;
+    private int pontuacaoTotal;
+
 
     // Construtor atualizado para incluir dataNascimento e cpf
-    public Usuario(long id, String nomeCompleto, String email, String dataNascimento, String cpf) {
+    public Usuario(long id, String nomeCompleto, String email, String dataNascimento, String cpf, int pontuacaoTotal) {
         this.id = id;
         this.nomeCompleto = nomeCompleto;
         this.email = email;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
+        this.pontuacaoTotal = pontuacaoTotal;
     }
 
     // Getters
@@ -22,11 +25,13 @@ public class Usuario {
     public String getEmail() { return email; }
     public String getDataNascimento() { return dataNascimento; }
     public String getCpf() { return cpf; }
+    public int getPontuacaoTotal() { return pontuacaoTotal; }
 
-    // Setters (se necessário no futuro)
+    // Setters
     public void setId(long id) { this.id = id; }
     public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; }
     public void setEmail(String email) { this.email = email; }
     public void setDataNascimento(String dataNascimento) { this.dataNascimento = dataNascimento; }
     public void setCpf(String cpf) { this.cpf = cpf; }
+    public void setPontuacaoTotal(int pontuacaoTotal) { this.pontuacaoTotal = pontuacaoTotal; }
 }

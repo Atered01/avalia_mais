@@ -1,4 +1,4 @@
-package com.example.avalia.cadastro;
+package com.example.avalia.usuario;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;

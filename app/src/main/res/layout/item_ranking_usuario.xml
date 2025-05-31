@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="6dp"
+    app:cardElevation="3dp"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textViewPosicaoRanking"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="1." />
+
+        <ImageView
+            android:id="@+id/imageViewAvatarRanking"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:srcCompat="@android:drawable/sym_def_app_icon"  tools:srcCompat="@tools:sample/avatars"
+            app:layout_constraintStart_toEndOf="@id/textViewPosicaoRanking"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="16dp"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:id="@+id/linearLayoutInfoUsuarioRanking"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@id/imageViewAvatarRanking"
+            app:layout_constraintEnd_toStartOf="@id/imageViewMedalhaRanking"
+            app:layout_constraintTop_toTopOf="@id/imageViewAvatarRanking"
+            app:layout_constraintBottom_toBottomOf="@id/imageViewAvatarRanking"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:id="@+id/textViewNomeUsuarioRanking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                tools:text="João Vitor da Silva Sauro" />
+
+            <TextView
+                android:id="@+id/textViewPontosUsuarioRanking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="?attr/colorPrimary"
+                tools:text="1500 Pontos" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageViewMedalhaRanking"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:srcCompat="@android:drawable/star_on" android:visibility="gone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

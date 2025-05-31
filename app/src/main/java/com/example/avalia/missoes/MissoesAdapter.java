@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView; // Import necessário para ImageView
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,12 +18,13 @@ import java.util.List;
 public class MissoesAdapter extends RecyclerView.Adapter<MissoesAdapter.MissaoViewHolder> {
 
     private List<Missao> listaMissoes;
-    private Context context; // Embora não usado diretamente no código abaixo, é bom ter para futuras necessidades
+    private Context context;
     private OnMissaoInteractionListener listener;
 
     // Interface para comunicar cliques/mudanças para a Activity
+    // ATUALIZAÇÃO: Adicionado o parâmetro 'position'
     public interface OnMissaoInteractionListener {
-        void onMissaoStatusChanged(Missao missao, boolean isChecked);
+        void onMissaoStatusChanged(Missao missao, boolean isChecked, int position);
     }
 
     // Construtor
@@ -36,81 +37,65 @@ public class MissoesAdapter extends RecyclerView.Adapter<MissoesAdapter.MissaoVi
     @NonNull
     @Override
     public MissaoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Infla (cria) a view do item da lista a partir do XML item_missao.xml
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_missao, parent, false);
         return new MissaoViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MissaoViewHolder holder, int position) {
-        // Pega a missão atual da lista
         Missao missaoAtual = listaMissoes.get(position);
 
-        // Define os dados da missão nos componentes visuais do ViewHolder
-
-        // **INÍCIO DA LÓGICA PARA O ÍCONE DA MISSÃO**
-        if (missaoAtual.getIconResourceId() != 0) { // Verifica se tem um ID de ícone válido (0 geralmente é um ID inválido)
+        // Definir ícone da missão
+        if (missaoAtual.getIconResourceId() != 0) {
             holder.imageViewIconeMissao.setImageResource(missaoAtual.getIconResourceId());
         } else {
-            // Define um ícone placeholder padrão se nenhum ID específico for fornecido ou se for inválido
             holder.imageViewIconeMissao.setImageResource(R.drawable.ic_task_placeholder);
         }
-        // **FIM DA LÓGICA PARA O ÍCONE DA MISSÃO**
 
         holder.textViewDescricao.setText(missaoAtual.getDescricao());
-        holder.textViewPontos.setText("+" + missaoAtual.getPontos() + " PTS"); // Adicionando o "+" para ficar como na imagem
+        holder.textViewPontos.setText("+" + missaoAtual.getPontos() + " PTS");
 
-        // Remove o listener antigo para evitar chamadas múltiplas e define o estado correto do CheckBox
-        holder.checkBoxConcluida.setOnCheckedChangeListener(null);
+        // Configurar o CheckBox e o estilo do texto baseado no estado 'concluida' do objeto Missao
+        // O estado 'concluida' do objeto Missao é a fonte da verdade aqui.
+        // Ele será atualizado pela TelaMissoes após a confirmação do BD.
+        holder.checkBoxConcluida.setOnCheckedChangeListener(null); // Limpar listener antigo
         holder.checkBoxConcluida.setChecked(missaoAtual.isConcluida());
 
-        // Aplica/remove o efeito de "riscado" na descrição se a missão estiver concluída
         if (missaoAtual.isConcluida()) {
             holder.textViewDescricao.setPaintFlags(holder.textViewDescricao.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.textViewDescricao.setAlpha(0.5f); // Opcional: Deixar o texto um pouco transparente
+            holder.textViewDescricao.setAlpha(0.5f);
         } else {
             holder.textViewDescricao.setPaintFlags(holder.textViewDescricao.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-            holder.textViewDescricao.setAlpha(1.0f); // Opcional: Restaurar opacidade total
+            holder.textViewDescricao.setAlpha(1.0f);
         }
 
-        // Define o listener para o CheckBox
+        // Configurar o listener para o CheckBox
         holder.checkBoxConcluida.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (listener != null) {
-                // Atualiza o status da missão no objeto Missao
-                missaoAtual.setConcluida(isChecked);
-                // Notifica a Activity sobre a mudança
-                listener.onMissaoStatusChanged(missaoAtual, isChecked);
-
-                // Atualiza o visual (riscado e opacidade) imediatamente
-                if (isChecked) {
-                    holder.textViewDescricao.setPaintFlags(holder.textViewDescricao.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                    holder.textViewDescricao.setAlpha(0.5f);
-                } else {
-                    holder.textViewDescricao.setPaintFlags(holder.textViewDescricao.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                    holder.textViewDescricao.setAlpha(1.0f);
+            // Verifica se foi uma interação do usuário para evitar chamadas recursivas ou indesejadas
+            if (buttonView.isPressed()) {
+                if (listener != null) {
+                    // Notifica a Activity/Fragment sobre a mudança, passando a posição
+                    // A Activity será responsável por atualizar o estado do objeto Missao
+                    // e o banco de dados.
+                    listener.onMissaoStatusChanged(missaoAtual, isChecked, holder.getAdapterPosition());
                 }
-                // notifyItemChanged(position); // Alternativa para redesenhar o item, pode ser mais pesado.
-                // A atualização direta dos PaintFlags costuma ser suficiente e mais leve.
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        // Retorna o número total de missões na lista
         return listaMissoes != null ? listaMissoes.size() : 0;
     }
 
-    // ViewHolder: Mantém as referências para os componentes visuais de cada item da lista
     public static class MissaoViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewIconeMissao; // Referência para o ImageView do ícone
+        ImageView imageViewIconeMissao;
         TextView textViewDescricao;
         TextView textViewPontos;
         CheckBox checkBoxConcluida;
 
         public MissaoViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Referencia os componentes do layout item_missao.xml
             imageViewIconeMissao = itemView.findViewById(R.id.imageViewIconeMissao);
             textViewDescricao = itemView.findViewById(R.id.textViewDescricaoMissao);
             textViewPontos = itemView.findViewById(R.id.textViewPontosMissao);
@@ -118,29 +103,16 @@ public class MissoesAdapter extends RecyclerView.Adapter<MissoesAdapter.MissaoVi
         }
     }
 
-    // Metodo para atualizar a lista de missões, se necessário (ex: após carregar do banco)
     public void atualizarLista(List<Missao> novasMissoes) {
         this.listaMissoes.clear();
         if (novasMissoes != null) {
             this.listaMissoes.addAll(novasMissoes);
         }
-        notifyDataSetChanged(); // Notifica o RecyclerView que os dados mudaram para ele redesenhar
+        notifyDataSetChanged(); // Notifica o RecyclerView que os dados mudaram
     }
 
-    // Metodo para adicionar uma única missão (pode ser útil)
-    public void adicionarMissao(Missao missao) {
-        if (this.listaMissoes != null && missao != null) {
-            this.listaMissoes.add(missao);
-            notifyItemInserted(this.listaMissoes.size() - 1);
-        }
-    }
-
-    // Metodo para remover uma missão (pode ser útil)
-    public void removerMissao(int position) {
-        if (this.listaMissoes != null && position >= 0 && position < this.listaMissoes.size()) {
-            this.listaMissoes.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, this.listaMissoes.size()); // Para atualizar posições
-        }
-    }
+    // Método para atualizar um item específico, pode ser útil se você não quiser recarregar toda a lista
+    // mas a TelaMissoes já está usando notifyItemChanged(position) que internamente fará o rebind.
+    // Se você atualizar o objeto na lista da TelaMissoes e chamar notifyItemChanged(position),
+    // o onBindViewHolder será chamado para essa posição e redesenhará com os dados atualizados.
 }

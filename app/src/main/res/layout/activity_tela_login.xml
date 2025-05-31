@@ -64,7 +64,8 @@
             android:id="@+id/cbManterConectado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mantenha-se conectado?" />
+            android:text="Mantenha-se conectado?"
+            android:textColor="@android:color/black"/>
 
         <Space
             android:layout_width="0dp"

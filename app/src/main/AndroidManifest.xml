@@ -24,19 +24,19 @@
             android:name=".ChatBot"
             android:exported="false" />
         <activity
-            android:name=".missoes.tela_missoes"
+            android:name=".missoes.TelaMissoes"
             android:exported="false" />
         <activity
             android:name=".TelaHome"
             android:exported="false" />
         <activity
-            android:name=".cadastro.TelaEsqueceuSenha"
+            android:name=".usuario.TelaEsqueceuSenha"
             android:exported="false" />
         <activity
-            android:name=".cadastro.TelaCadastro"
+            android:name=".usuario.TelaCadastro"
             android:exported="false" />
         <activity
-            android:name=".cadastro.TelaLogin"
+            android:name=".usuario.TelaLogin"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
