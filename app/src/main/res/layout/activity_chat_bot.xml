@@ -1,58 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:andorid="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/telaChatBot" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="#FFFFFF"
-    android:id="@+id/telaChatBot">
+    tools:context=".chatbot.ChatBot"> <androidx.appcompat.widget.Toolbar
+    android:id="@+id/toolbarChatbot"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/blueDark"
+    app:title="Avalia IA"
+    app:titleTextColor="@android:color/white"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <TextView
-        android:id="@+id/tituloTextView"
+    <ProgressBar
+        android:id="@+id/progressBarIA"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ChatBot"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:paddingBottom="12dp" />
+        android:layout_below="@id/toolbarChatbot"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewChat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_above="@id/layoutEntradaMensagem"
+        android:layout_below="@id/progressBarIA" android:padding="8dp"
         android:background="#EEEEEE"
-        android:padding="8dp">
-
-        <LinearLayout
-            android:id="@+id/chatLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+        android:clipToPadding="false"/>
 
     <LinearLayout
+        android:id="@+id/layoutEntradaMensagem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@android:color/white"
+        android:elevation="4dp">
 
         <EditText
-            android:id="@+id/perguntaEditText"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:id="@+id/perguntaEditText" android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:layout_weight="1"
             android:hint="Digite sua pergunta..."
-            android:inputType="text"
-            android:background="@android:drawable/editbox_background" />
+            android:inputType="textShortMessage|textCapSentences"
+            android:maxLines="4"
+            android:background="@android:drawable/editbox_background_normal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginEnd="8dp"/>
 
-        <Button
-            android:id="@+id/enviarButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enviar"
-            andorid:background="@color/blueDark"/>
+        <ImageButton
+            android:id="@+id/enviarButton" android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_send"
+            android:contentDescription="Enviar Mensagem"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/blueDark"
+            android:padding="8dp"
+            android:scaleType="fitCenter"/>
     </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

@@ -22,19 +22,19 @@
             android:name=".prova.SelecionarProva"
             android:exported="false" />
         <activity
-            android:name=".TelaProva"
+            android:name=".prova.TelaProva"
             android:exported="false" />
         <activity
-            android:name=".TelaRanking"
+            android:name=".ranking.TelaRanking"
             android:exported="false" />
         <activity
-            android:name=".ChatBot"
+            android:name=".chatbot.ChatBot"
             android:exported="false" />
         <activity
             android:name=".missoes.TelaMissoes"
             android:exported="false" />
         <activity
-            android:name=".TelaHome"
+            android:name=".principal.TelaHome"
             android:exported="false" />
         <activity
             android:name=".usuario.TelaEsqueceuSenha"

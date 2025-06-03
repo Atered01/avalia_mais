@@ -20,7 +20,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.avalia.R;
-import com.example.avalia.bancodedados.UsuarioController;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -1,4 +1,4 @@
-package com.example.avalia.adapters; // Seu pacote
+package com.example.avalia.prova; // Seu pacote
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +7,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.avalia.R;
-import com.example.avalia.prova.Prova; // Certifique-se que o import para Prova está correto
 
 import java.util.List;
 

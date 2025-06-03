@@ -11,9 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.avalia.R; // Importe sua classe R
-import com.example.avalia.TelaProva; // Importe a TelaProva (ou o nome que você deu)
-import com.example.avalia.adapters.ProvaSelecaoAdapter;
-import com.example.avalia.bancodedados.ProvaController;
 
 import java.util.ArrayList;
 import java.util.List;

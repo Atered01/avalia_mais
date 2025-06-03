@@ -11,11 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.avalia.GerenciadorDeSessao;
+import com.example.avalia.usuario.GerenciadorDeSessao;
 import com.example.avalia.R;
-import com.example.avalia.bancodedados.MissoesController;
-import com.example.avalia.bancodedados.UsuarioController;
-import com.example.avalia.usuario.Usuario; // Importe se for buscar o usuário para pontuação total
+import com.example.avalia.usuario.UsuarioController;
 
 import java.util.ArrayList;
 import java.util.List;

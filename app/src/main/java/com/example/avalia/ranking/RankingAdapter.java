@@ -1,4 +1,4 @@
-package com.example.avalia.adapters;
+package com.example.avalia.ranking;
 
 import android.content.Context;
 import android.view.LayoutInflater;

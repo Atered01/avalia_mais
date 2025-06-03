@@ -1,4 +1,4 @@
-package com.example.avalia.bancodedados;
+package com.example.avalia.missoes;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,7 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException; // open() no dbHelper pode lançar
 import android.util.Log;
 
-import com.example.avalia.missoes.Missao;
+import com.example.avalia.bancodedados.BancoDeDados;
+import com.example.avalia.bancodedados.DatabaseContract;
 
 import java.util.ArrayList;
 import java.util.List;

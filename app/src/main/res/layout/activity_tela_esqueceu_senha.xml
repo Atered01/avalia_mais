@@ -18,7 +18,8 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginTop="60dp"
-        android:layout_marginBottom="40dp" />
+        android:layout_marginBottom="40dp"
+        android:textColor="@color/black" />
 
     <!-- Subtítulo -->
     <TextView
@@ -28,15 +29,16 @@
         android:text="Esqueci a senha"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/black" />
 
     <!-- Descrição explicativa -->
     <TextView
         android:id="@+id/tvDescricao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Não se preocupe, embora tenha esquecido sua senha, enviaremos um email
-        para mudar ela. Basta nos informar seu email da conta no campo abaixo:"
+        android:text="Não se preocupe, embora tenha esquecido sua senha, enviaremos um email para mudar ela.
+        \nBasta nos informar seu email da conta no campo abaixo:"
         android:textSize="14sp"
         android:textColor="#444444"
         android:layout_marginBottom="30dp" />

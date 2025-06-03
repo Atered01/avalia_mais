@@ -1,4 +1,4 @@
-package com.example.avalia;
+package com.example.avalia.principal;
 
 // ... (imports existentes) ...
 import android.app.Activity;
@@ -20,14 +20,18 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.avalia.bancodedados.MissoesController;
-import com.example.avalia.bancodedados.ProvaController;
-import com.example.avalia.bancodedados.UsuarioController;
+import com.example.avalia.R;
+import com.example.avalia.missoes.MissoesController;
+import com.example.avalia.prova.ProvaController;
+import com.example.avalia.usuario.GerenciadorDeSessao;
+import com.example.avalia.usuario.UsuarioController;
+import com.example.avalia.chatbot.ChatBot;
 import com.example.avalia.missoes.Missao;
 import com.example.avalia.missoes.TelaMissoes;
 // Importe a futura tela de seleção de provas
 // import com.example.avalia.prova.SelecionarProvaActivity; (Quando for criada)
 import com.example.avalia.prova.SelecionarProva;
+import com.example.avalia.ranking.TelaRanking;
 import com.example.avalia.usuario.TelaLogin;
 import com.example.avalia.usuario.Usuario;
 

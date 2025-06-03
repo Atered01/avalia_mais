@@ -17,7 +17,8 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginTop="60dp"
-        android:layout_marginBottom="40dp" />
+        android:layout_marginBottom="40dp"
+        android:textColor="@color/black" />
 
     <!-- Subtítulo Login -->
     <TextView
@@ -26,7 +27,8 @@
         android:text="Login"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginBottom="30dp" />
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/black" />
 
     <!-- Campo Email -->
     <EditText
@@ -65,7 +67,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Mantenha-se conectado?"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:buttonTint="@color/blueDark"/>
 
         <Space
             android:layout_width="0dp"

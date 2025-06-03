@@ -1,4 +1,4 @@
-package com.example.avalia;
+package com.example.avalia.usuario;
 
 import android.content.Context;
 import android.content.SharedPreferences;

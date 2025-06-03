@@ -1,4 +1,4 @@
-package com.example.avalia;
+package com.example.avalia.ranking;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.avalia.adapters.RankingAdapter;
-import com.example.avalia.bancodedados.UsuarioController;
+import com.example.avalia.R;
+import com.example.avalia.usuario.UsuarioController;
 import com.example.avalia.usuario.Usuario;
 
 import java.util.ArrayList;

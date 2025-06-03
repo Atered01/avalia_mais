@@ -12,10 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.avalia.GerenciadorDeSessao;
 import com.example.avalia.R;
-import com.example.avalia.TelaHome;
-import com.example.avalia.bancodedados.UsuarioController;
+import com.example.avalia.principal.TelaHome;
 
 public class TelaLogin extends AppCompatActivity {
 

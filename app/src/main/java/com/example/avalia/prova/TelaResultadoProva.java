@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.avalia.R; // Sua classe R
-import com.example.avalia.TelaHome; // Para o botão de voltar
+import com.example.avalia.principal.TelaHome; // Para o botão de voltar
 
 import java.util.Locale;
 

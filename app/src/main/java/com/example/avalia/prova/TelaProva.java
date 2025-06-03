@@ -1,4 +1,4 @@
-package com.example.avalia; // Ajuste este pacote para o seu
+package com.example.avalia.prova; // Ajuste este pacote para o seu
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,14 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.avalia.bancodedados.ProvaController;
-import com.example.avalia.GerenciadorDeSessao; // <<--- DESCOMENTE E VERIFIQUE O PACOTE
-import com.example.avalia.prova.Questao;
-import com.example.avalia.prova.ResultadoProva; // <<--- USA A CLASSE MODELO RENOMEADA
+import com.example.avalia.R;
 // Importe a ACTIVITY que vai exibir o resultado:
-import com.example.avalia.prova.TelaResultadoProva; // <<--- IMPORT PARA A ACTIVITY DE RESULTADO
+import com.example.avalia.usuario.GerenciadorDeSessao;
 
-import java.io.Serializable; // Questao precisa ser Serializable
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

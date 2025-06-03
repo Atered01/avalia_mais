@@ -25,7 +25,7 @@
         android:layout_below="@id/textViewTituloTelaMissoes"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
-        tools:text="Missões de Matemática"
+        tools:text="Matemática"
         android:textSize="18sp"
         android:textColor="@android:color/darker_gray"/>
 
