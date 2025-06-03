@@ -1,72 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_horizontal"
-    android:id="@+id/telaProva">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/txtTitulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Prova da disciplina"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"/>
-
-    <TextView
-        android:id="@+id/txtPergunta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Em que ano acabou a guerra fria?"
-        android:textSize="18sp"
-        android:layout_marginBottom="16dp"/>
-
-    <RadioGroup
-        android:id="@+id/grupoAlternativas"
+    <LinearLayout
+        android:id="@+id/telaProvaContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RadioButton
-            android:id="@+id/alternativaA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alternativa A - 1980" />
-
-        <RadioButton
-            android:id="@+id/alternativaB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alternativa B - 1790" />
-
-        <RadioButton
-            android:id="@+id/alternativaC"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alternativa C - 1989" />
-
-        <RadioButton
-            android:id="@+id/alternativaD"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alternativa D - 1980" />
-    </RadioGroup>
-
-    <Button
-        android:id="@+id/btnProxima"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Proxima"
-        android:layout_marginTop="24dp"/>
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context=".TelaProva">
 
-    <TextView
-        android:id="@+id/txtResultado"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:textColor="#FF0000"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/textViewNomeDaProva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Nome da Prova"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/textViewContadorQuestao"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Questão: 1/10"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/textViewCronometro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tempo: 60:00"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textViewEnunciadoQuestao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Carregando enunciado da questão..."
+            android:textSize="18sp"
+            android:layout_marginBottom="16dp"
+            android:minLines="3"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroupAlternativas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radioButtonAlternativaA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alternativa A"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radioButtonAlternativaB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alternativa B"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radioButtonAlternativaC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alternativa C"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radioButtonAlternativaD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alternativa D"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
+
+            <RadioButton
+                android:id="@+id/radioButtonAlternativaE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Alternativa E"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/buttonProximaFinalizar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Próxima Questão"
+            android:layout_marginTop="24dp"/>
+
+    </LinearLayout>
+</ScrollView>

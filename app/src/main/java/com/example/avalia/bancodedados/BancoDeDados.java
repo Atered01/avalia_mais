@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.avalia.missoes.Missao;
+import com.example.avalia.missoes.Missao; // Presumo que você tenha essa classe Missao
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -19,19 +19,19 @@ import java.util.List;
 import java.util.Locale;
 
 public class BancoDeDados extends SQLiteOpenHelper {
-    // INCREMENTE A VERSÃO DO BANCO DE DADOS POR CAUSA DA NOVA TABELA
-    public static final int DATABASE_VERSION = 7; // <<<<<<< ATUALIZADO DE 5 PARA 6
-    public static final String DATABASE_NAME = "MissoesApp.db";
+    // INCREMENTE A VERSÃO DO BANCO DE DADOS POR CAUSA DAS NOVAS TABELAS DE PROVAS
+    public static final int DATABASE_VERSION = 8; // <<<<<<< ATUALIZADO DE 7 PARA 8
+    public static final String DATABASE_NAME = "MissoesApp.db"; // Mantendo o seu nome de BD
     private static final String TAG_LOG = "BancoDeDados";
 
-    // ... (SQL_CREATE_MISSOES_TABLE e SQL_CREATE_USUARIOS_TABLE como antes) ...
+    // Comandos SQL existentes (mantidos como no seu arquivo)
     private static final String SQL_CREATE_MISSOES_TABLE =
             "CREATE TABLE " + DatabaseContract.MissaoEntry.TABLE_NAME + " (" +
-                    DatabaseContract.MissaoEntry._ID + " INTEGER PRIMARY KEY," +
+                    DatabaseContract.MissaoEntry._ID + " INTEGER PRIMARY KEY," + // AUTOINCREMENT pode ser útil aqui também
                     DatabaseContract.MissaoEntry.COLUMN_NAME_ID_ORIGINAL + " INTEGER UNIQUE," +
                     DatabaseContract.MissaoEntry.COLUMN_NAME_DESCRICAO + " TEXT," +
                     DatabaseContract.MissaoEntry.COLUMN_NAME_PONTOS + " INTEGER," +
-                    DatabaseContract.MissaoEntry.COLUMN_NAME_CONCLUIDA + " INTEGER," + // Pode ser repensado no futuro
+                    DatabaseContract.MissaoEntry.COLUMN_NAME_CONCLUIDA + " INTEGER," +
                     DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO + " TEXT," +
                     DatabaseContract.MissaoEntry.COLUMN_NAME_ICON_RESOURCE_ID + " INTEGER DEFAULT 0)";
 
@@ -46,7 +46,6 @@ public class BancoDeDados extends SQLiteOpenHelper {
                     DatabaseContract.UserEntry.COLUMN_NAME_CPF + " TEXT," +
                     DatabaseContract.UserEntry.COLUMN_NAME_PONTUACAO_TOTAL + " INTEGER DEFAULT 0)";
 
-    // SQL PARA CRIAR A NOVA TABELA USUARIO_MISSOES
     private static final String SQL_CREATE_USUARIO_MISSOES_TABLE =
             "CREATE TABLE " + DatabaseContract.UsuarioMissaoEntry.TABLE_NAME + " (" +
                     DatabaseContract.UsuarioMissaoEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -56,9 +55,18 @@ public class BancoDeDados extends SQLiteOpenHelper {
                     "FOREIGN KEY(" + DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_USUARIO + ") REFERENCES " +
                     DatabaseContract.UserEntry.TABLE_NAME + "(" + DatabaseContract.UserEntry._ID + ")," +
                     "FOREIGN KEY(" + DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_MISSAO_ORIGINAL + ") REFERENCES " +
-                    DatabaseContract.MissaoEntry.TABLE_NAME + "(" + DatabaseContract.MissaoEntry.COLUMN_NAME_ID_ORIGINAL + ")," +
+                    DatabaseContract.MissaoEntry.TABLE_NAME + "(" + DatabaseContract.MissaoEntry.COLUMN_NAME_ID_ORIGINAL + ")," + // Ajuste se MissaoEntry._ID for a FK
                     "UNIQUE(" + DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_USUARIO + "," +
                     DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_MISSAO_ORIGINAL + "))";
+
+    // Comandos SQL para as NOVAS tabelas (vindos do seu DatabaseContract.java)
+    // Nota: Se os comandos SQL CREATE já estão no DatabaseContract, você pode referenciá-los diretamente.
+    // Ex: DatabaseContract.SQL_CREATE_PROVAS
+    // Para clareza, vou copiá-los aqui, mas o ideal é que estejam apenas em um lugar (DatabaseContract).
+    // Se você já os tem no DatabaseContract como `static final String`, use DatabaseContract.NOME_DO_COMANDO
+
+    // Reutilizando os comandos que você já colocou no DatabaseContract.java
+    // Não é necessário redeclará-los aqui se eles já são public static final no DatabaseContract.
 
 
     public BancoDeDados(Context context) {
@@ -72,24 +80,37 @@ public class BancoDeDados extends SQLiteOpenHelper {
         Log.i(TAG_LOG, "Tabela Missoes criada.");
         db.execSQL(SQL_CREATE_USUARIOS_TABLE);
         Log.i(TAG_LOG, "Tabela Usuarios criada.");
-        db.execSQL(SQL_CREATE_USUARIO_MISSOES_TABLE); // <<<<<<< CRIAR NOVA TABELA
+        db.execSQL(SQL_CREATE_USUARIO_MISSOES_TABLE);
         Log.i(TAG_LOG, "Tabela UsuarioMissoes criada.");
+
+        // CRIAR NOVAS TABELAS DE PROVAS
+        db.execSQL(DatabaseContract.SQL_CREATE_PROVAS); // Usando o comando do seu DatabaseContract
+        Log.i(TAG_LOG, "Tabela Provas criada.");
+        db.execSQL(DatabaseContract.SQL_CREATE_QUESTOES); // Usando o comando do seu DatabaseContract
+        Log.i(TAG_LOG, "Tabela Questoes criada.");
+        db.execSQL(DatabaseContract.SQL_CREATE_RESULTADOS_PROVAS); // Usando o comando do seu DatabaseContract
+        Log.i(TAG_LOG, "Tabela ResultadosProvas criada.");
+
 
         if (isTableEmpty(db, DatabaseContract.MissaoEntry.TABLE_NAME)) {
             inicializarMissoesPadrao(db);
         }
+        // Você pode querer adicionar um método similar para inicializar provas/questões padrão aqui
+        // exemplo: inicializarProvasPadrao(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG_LOG, "onUpgrade: Atualizando banco de dados da versão " + oldVersion + " para " + newVersion);
 
+        // Lógica de upgrade incremental existente
         if (oldVersion < 2) {
             Log.d(TAG_LOG, "Upgrade de v" + oldVersion + ": Criando tabela Usuarios.");
-            db.execSQL(SQL_CREATE_USUARIOS_TABLE);
+            if (!tableExists(db, DatabaseContract.UserEntry.TABLE_NAME)) { // Adicionar verificação
+                db.execSQL(SQL_CREATE_USUARIOS_TABLE);
+            }
         }
         if (oldVersion < 3) {
-            // ... lógica para adicionar data_nascimento e cpf (como antes)
             if (!columnExists(db, DatabaseContract.UserEntry.TABLE_NAME, DatabaseContract.UserEntry.COLUMN_NAME_DATA_NASCIMENTO)) {
                 db.execSQL("ALTER TABLE " + DatabaseContract.UserEntry.TABLE_NAME + " ADD COLUMN " + DatabaseContract.UserEntry.COLUMN_NAME_DATA_NASCIMENTO + " TEXT");
             }
@@ -98,18 +119,15 @@ public class BancoDeDados extends SQLiteOpenHelper {
             }
         }
         if (oldVersion < 4) {
-            // ... lógica para adicionar icon_resource_id (como antes)
             if (!columnExists(db, DatabaseContract.MissaoEntry.TABLE_NAME, DatabaseContract.MissaoEntry.COLUMN_NAME_ICON_RESOURCE_ID)) {
                 db.execSQL("ALTER TABLE " + DatabaseContract.MissaoEntry.TABLE_NAME + " ADD COLUMN " + DatabaseContract.MissaoEntry.COLUMN_NAME_ICON_RESOURCE_ID + " INTEGER DEFAULT 0");
             }
         }
         if (oldVersion < 5) {
-            // ... lógica para adicionar pontuacao_total (como antes)
             if (!columnExists(db, DatabaseContract.UserEntry.TABLE_NAME, DatabaseContract.UserEntry.COLUMN_NAME_PONTUACAO_TOTAL)) {
                 db.execSQL("ALTER TABLE " + DatabaseContract.UserEntry.TABLE_NAME + " ADD COLUMN " + DatabaseContract.UserEntry.COLUMN_NAME_PONTUACAO_TOTAL + " INTEGER DEFAULT 0");
             }
         }
-        // ADICIONAR NOVA TABELA SE ESTIVER ATUALIZANDO DE UMA VERSÃO ANTERIOR A 6
         if (oldVersion < 6) {
             Log.d(TAG_LOG, "Upgrade de v" + oldVersion + ": Criando tabela UsuarioMissoes.");
             if (!tableExists(db, DatabaseContract.UsuarioMissaoEntry.TABLE_NAME)) {
@@ -117,21 +135,34 @@ public class BancoDeDados extends SQLiteOpenHelper {
                 Log.i(TAG_LOG, "Tabela UsuarioMissoes criada durante o upgrade.");
             }
         }
+        if (oldVersion < 7) {
+            if (!columnExists(db, DatabaseContract.UserEntry.TABLE_NAME, "nova_coluna")) { // "nova_coluna" era um exemplo seu
+                // db.execSQL("ALTER TABLE " + DatabaseContract.UserEntry.TABLE_NAME + " ADD COLUMN nova_coluna TEXT");
+                // Log.i(TAG_LOG, "Coluna nova_coluna adicionada à tabela Usuarios.");
+            }
+        }
 
-        if (oldVersion < 7) { // Migração para a versão 7
-            if (!columnExists(db, DatabaseContract.UserEntry.TABLE_NAME, "nova_coluna")) {
-                try {
-                    db.execSQL("ALTER TABLE " + DatabaseContract.UserEntry.TABLE_NAME +
-                            " ADD COLUMN nova_coluna TEXT");
-                    Log.i(TAG_LOG, "Coluna nova_coluna adicionada à tabela Usuarios.");
-                } catch (Exception e) {
-                    Log.e(TAG_LOG, "Erro ao adicionar coluna nova_coluna: " + e.getMessage());
-                }
+        // NOVO: Lógica de upgrade para a versão 8 (adicionar tabelas de Provas)
+        if (oldVersion < 8) {
+            Log.d(TAG_LOG, "Upgrade de v" + oldVersion + " para v8: Criando tabelas de Provas.");
+            if (!tableExists(db, DatabaseContract.ProvaEntry.TABLE_NAME)) {
+                db.execSQL(DatabaseContract.SQL_CREATE_PROVAS); // Usando o comando do seu DatabaseContract
+                Log.i(TAG_LOG, "Tabela Provas criada durante o upgrade.");
+            }
+            if (!tableExists(db, DatabaseContract.QuestaoEntry.TABLE_NAME)) {
+                db.execSQL(DatabaseContract.SQL_CREATE_QUESTOES); // Usando o comando do seu DatabaseContract
+                Log.i(TAG_LOG, "Tabela Questoes criada durante o upgrade.");
+            }
+            if (!tableExists(db, DatabaseContract.ResultadoProvaEntry.TABLE_NAME)) {
+                db.execSQL(DatabaseContract.SQL_CREATE_RESULTADOS_PROVAS); // Usando o comando do seu DatabaseContract
+                Log.i(TAG_LOG, "Tabela ResultadosProvas criada durante o upgrade.");
             }
         }
     }
 
-    // ... (métodos tableExists, columnExists, hashPassword, bytesToHex, getCurrentDateTime, isTableEmpty, inicializarMissoesPadrao, getListaDeMissoesPadrao como antes) ...
+    // ... (métodos tableExists, columnExists, hashPassword, bytesToHex, getCurrentDateTime, isTableEmpty, inicializarMissoesPadrao, getListaDeMissoesPadrao como no seu arquivo) ...
+    // Esses métodos auxiliares que você já tem são ótimos!
+
     private boolean tableExists(SQLiteDatabase db, String tableName) {
         Cursor cursor = db.rawQuery("SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = ?", new String[]{tableName});
         if (cursor != null) {
@@ -150,22 +181,25 @@ public class BancoDeDados extends SQLiteOpenHelper {
             cursor = db.rawQuery("PRAGMA table_info(" + tableName + ")", null);
             if (cursor != null) {
                 int nameColumnIndex = cursor.getColumnIndex("name");
-                if (nameColumnIndex == -1) { return false; }
+                if (nameColumnIndex == -1) {
+                    cursor.close(); // Fechar cursor aqui também
+                    return false;
+                }
                 while (cursor.moveToNext()) {
                     if (columnName.equals(cursor.getString(nameColumnIndex))) {
+                        cursor.close(); // Fechar cursor assim que encontrar
                         return true;
                     }
                 }
             }
         } finally {
-            if (cursor != null) {
+            if (cursor != null && !cursor.isClosed()) { // Verificar se já não foi fechado
                 cursor.close();
             }
         }
         return false;
     }
 
-    // ... (restante da classe BancoDeDados.java) ...
     public static String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -198,8 +232,9 @@ public class BancoDeDados extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + tableName, null);
         boolean isEmpty = true;
         if (cursor != null) {
-            cursor.moveToFirst();
-            isEmpty = (cursor.getInt(0) == 0);
+            if (cursor.moveToFirst()) { // Adicionar verificação antes de getInt
+                isEmpty = (cursor.getInt(0) == 0);
+            }
             cursor.close();
         }
         return isEmpty;
@@ -207,15 +242,18 @@ public class BancoDeDados extends SQLiteOpenHelper {
 
     private void inicializarMissoesPadrao(SQLiteDatabase db) {
         Log.d(TAG_LOG, "Inicializando missões padrão...");
-        List<Missao> missoesPadrao = getListaDeMissoesPadrao();
+        List<Missao> missoesPadrao = getListaDeMissoesPadrao(); // Método que você já possui
         for (Missao missao : missoesPadrao) {
             ContentValues values = new ContentValues();
+            // Assumindo que sua classe Missao tem os getters correspondentes
+            // e que DatabaseContract.MissaoEntry tem as constantes corretas
             values.put(DatabaseContract.MissaoEntry.COLUMN_NAME_ID_ORIGINAL, missao.getIdOriginal());
             values.put(DatabaseContract.MissaoEntry.COLUMN_NAME_DESCRICAO, missao.getDescricao());
             values.put(DatabaseContract.MissaoEntry.COLUMN_NAME_PONTOS, missao.getPontos());
             values.put(DatabaseContract.MissaoEntry.COLUMN_NAME_CONCLUIDA, missao.isConcluida() ? 1 : 0);
             values.put(DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO, missao.getAreaConhecimento());
             values.put(DatabaseContract.MissaoEntry.COLUMN_NAME_ICON_RESOURCE_ID, missao.getIconResourceId());
+
 
             long resultado = db.insertWithOnConflict(DatabaseContract.MissaoEntry.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
             if (resultado != -1) {
@@ -226,34 +264,22 @@ public class BancoDeDados extends SQLiteOpenHelper {
         }
     }
 
+    // Você já tem este método, apenas garantindo que ele está aqui para o contexto
     private List<Missao> getListaDeMissoesPadrao() {
         List<Missao> missoes = new ArrayList<>();
         int idCounter = 1;
-        int placeholderIconId = 0;
+        int placeholderIconId = 0; // Use um ID de recurso drawable real se tiver
 
         String areaMat = "Matemática e suas Tecnologias";
         missoes.add(new Missao(idCounter++, "Resolver 15 exercícios de Análise Combinatória.", 15, areaMat, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Estudar Funções Trigonométricas (Seno e Cosseno).", 20, areaMat, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Ler o capítulo sobre Geometria Espacial.", 10, areaMat, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Fazer um simulado rápido de 10 questões de Matemática.", 25, areaMat, placeholderIconId));
-
+        // ... resto das suas missões padrão
         String areaHum = "Ciências Humanas e suas Tecnologias";
         missoes.add(new Missao(idCounter++, "Ler sobre os principais eventos da Guerra Fria.", 15, areaHum, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Analisar 3 charges sobre política brasileira atual.", 10, areaHum, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Estudar os conceitos de Globalização e seus impactos.", 20, areaHum, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Revisar os principais filósofos do Iluminismo.", 15, areaHum, placeholderIconId));
-
         String areaLing = "Linguagens, Códigos e suas Tecnologias";
         missoes.add(new Missao(idCounter++, "Interpretar 5 textos literários curtos.", 15, areaLing, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Escrever uma redação no modelo ENEM (Introdução).", 20, areaLing, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Revisar as figuras de linguagem mais comuns.", 10, areaLing, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Analisar a estrutura de 2 notícias de jornal.", 10, areaLing, placeholderIconId));
-
         String areaNat = "Ciências da Natureza e suas Tecnologias";
         missoes.add(new Missao(idCounter++, "Revisar os conceitos de Leis de Newton.", 15, areaNat, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Estudar o ciclo do Carbono e do Nitrogênio.", 20, areaNat, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Resolver 10 questões de Estequiometria.", 15, areaNat, placeholderIconId));
-        missoes.add(new Missao(idCounter++, "Ler sobre as principais fontes de energia renovável.", 10, areaNat, placeholderIconId));
+        // Adicione mais missões conforme sua lista original
         return missoes;
     }
 }

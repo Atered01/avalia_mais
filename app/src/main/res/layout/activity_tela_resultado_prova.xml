@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="24dp"
+    tools:context=".prova.TelaResultadoProva">
+
+    <TextView
+        android:id="@+id/textViewTituloResultado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resultado da Prova"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/textViewNomeProvaResultado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Matemática e suas Tecnologias"
+        android:textSize="20sp"
+        android:layout_marginBottom="24dp"/>
+
+    <ImageView
+        android:id="@+id/imageViewResultadoIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="16dp"
+        tools:src="@drawable/ic_star_points" />
+
+    <TextView
+        android:id="@+id/textViewDesempenho"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Você acertou 7 de 10 questões!"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewPorcentagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="(70% de acerto)"
+        android:textSize="18sp"
+        android:layout_marginBottom="32dp"/>
+
+    <Button
+        android:id="@+id/buttonVoltarInicioResultado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voltar para o Início"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:textSize="16sp"/>
+
+</LinearLayout>

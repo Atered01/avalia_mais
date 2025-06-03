@@ -3,12 +3,12 @@ package com.example.avalia.bancodedados;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
+import android.database.SQLException; // Mantido, pois open() pode lançá-la
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteException; // open() no dbHelper pode lançar
 import android.util.Log;
 
-import com.example.avalia.missoes.Missao; // Certifique-se que o import da sua classe Missao está correto
+import com.example.avalia.missoes.Missao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,63 +17,54 @@ public class MissoesController {
     private SQLiteDatabase database;
     private BancoDeDados dbHelper;
     private static final String TAG = "MissoesController";
+    // private Context context; // Se precisar do contexto para outras coisas
 
     public MissoesController(Context context) {
-        dbHelper = new BancoDeDados(context);
+        // this.context = context.getApplicationContext();
+        dbHelper = new BancoDeDados(context.getApplicationContext());
     }
 
-    public void open() throws SQLiteException { // SQLException é mais genérico que SQLiteException
+    public void open() throws SQLException {
         try {
             database = dbHelper.getWritableDatabase();
             Log.d(TAG, "Banco de dados aberto para MissoesController.");
-        } catch (Exception e) { // Captura Exception mais genérica para robustez
+        } catch (SQLiteException e) { // SQLiteException é uma boa captura aqui
             Log.e(TAG, "Erro ao abrir o banco de dados em MissoesController: ", e);
-            // Relançar como uma exceção específica do app ou tratar aqui
             throw new SQLException("Falha ao abrir banco de dados para MissoesController", e);
         }
     }
 
+    // Método close() revisado para fechar apenas a 'database'
     public void close() {
-        if (dbHelper != null) {
-            dbHelper.close();
-            Log.d(TAG, "Banco de dados fechado para MissoesController.");
-        }
         if (database != null && database.isOpen()) {
-            database.close(); // Garante que a instância do database também seja fechada
+            database.close();
             Log.d(TAG, "Instância SQLiteDatabase fechada em MissoesController.");
         }
+        // Não fechar dbHelper.close() aqui para permitir que seja compartilhado
     }
 
+    // isOpen() permanece útil se você quiser verificar externamente,
+    // mas os métodos internos agora não dependem tanto dele ser chamado de fora.
     public boolean isOpen() {
         return database != null && database.isOpen();
     }
 
-    /**
-     * Busca missões por área de conhecimento.
-     * Para cada missão, verifica se o usuário especificado já a concluiu.
-     * @param areaConhecimento A área de conhecimento para filtrar as missões.
-     * @param idUsuarioLogado O ID do usuário logado, para verificar o status de conclusão.
-     * Passe -1 ou um valor inválido se não quiser verificar por usuário.
-     * @return Lista de missões da área, com o status de conclusão definido para o usuário.
-     */
     public List<Missao> getMissoesPorAreaParaUsuario(String areaConhecimento, long idUsuarioLogado) {
         List<Missao> listaMissoes = new ArrayList<>();
+        Cursor cursor = null;
+        // Projeção como você tinha
         String[] projection = {
-                // DatabaseContract.MissaoEntry._ID, // O _ID da tabela missoes
                 DatabaseContract.MissaoEntry.COLUMN_NAME_ID_ORIGINAL,
                 DatabaseContract.MissaoEntry.COLUMN_NAME_DESCRICAO,
                 DatabaseContract.MissaoEntry.COLUMN_NAME_PONTOS,
-                // DatabaseContract.MissaoEntry.COLUMN_NAME_CONCLUIDA, // Status global, pode ser útil para outros fins
                 DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO,
                 DatabaseContract.MissaoEntry.COLUMN_NAME_ICON_RESOURCE_ID
         };
-
         String selection = DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO + " = ?";
         String[] selectionArgs = {areaConhecimento};
-        Cursor cursor = null;
 
         try {
-            if (!isOpen()) open(); // Garante que o BD esteja aberto
+            open(); // Abre a conexão para esta operação
 
             cursor = database.query(
                     DatabaseContract.MissaoEntry.TABLE_NAME,
@@ -83,84 +74,86 @@ public class MissoesController {
                     null, null, null
             );
 
-            while (cursor.moveToNext()) {
-                int idOriginal = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.MissaoEntry.COLUMN_NAME_ID_ORIGINAL));
-                String descricao = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.MissaoEntry.COLUMN_NAME_DESCRICAO));
-                int pontos = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.MissaoEntry.COLUMN_NAME_PONTOS));
-                String area = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO));
-                int iconId = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.MissaoEntry.COLUMN_NAME_ICON_RESOURCE_ID));
+            if (cursor != null && cursor.moveToFirst()) { // Adicionado null check para cursor
+                do {
+                    int idOriginalIndex = cursor.getColumnIndex(DatabaseContract.MissaoEntry.COLUMN_NAME_ID_ORIGINAL);
+                    int descIndex = cursor.getColumnIndex(DatabaseContract.MissaoEntry.COLUMN_NAME_DESCRICAO);
+                    int pontosIndex = cursor.getColumnIndex(DatabaseContract.MissaoEntry.COLUMN_NAME_PONTOS);
+                    int areaIndex = cursor.getColumnIndex(DatabaseContract.MissaoEntry.COLUMN_NAME_AREA_CONHECIMENTO);
+                    int iconIdIndex = cursor.getColumnIndex(DatabaseContract.MissaoEntry.COLUMN_NAME_ICON_RESOURCE_ID);
 
-                // Cria a missão. O status 'concluida' aqui será específico do usuário.
-                // Assumindo que o construtor de Missao que você usa é (int idOriginal, String descricao, int pontos, String area, int iconId)
-                // e que Missao tem um setter como setConcluida(boolean) ou um construtor que aceita.
-                // Vamos usar um construtor Missao(idOriginal, descricao, pontos, areaConhecimento, iconResourceId)
-                // e depois definir se foi concluída pelo usuário.
-                Missao missao = new Missao(idOriginal, descricao, pontos, area, iconId); // Ajuste o construtor conforme sua classe Missao
+                    if (idOriginalIndex != -1 && descIndex != -1 && pontosIndex != -1 && areaIndex != -1 && iconIdIndex != -1) {
+                        int idOriginal = cursor.getInt(idOriginalIndex);
+                        String descricao = cursor.getString(descIndex);
+                        int pontos = cursor.getInt(pontosIndex);
+                        String area = cursor.getString(areaIndex);
+                        int iconId = cursor.getInt(iconIdIndex);
 
-                // Verifica se esta missão foi concluída pelo usuário logado
-                if (idUsuarioLogado != -1) { // -1 pode indicar que não há usuário logado ou não queremos checar
-                    boolean concluidaPeloUsuario = isMissaoConcluidaPeloUsuario(idUsuarioLogado, idOriginal);
-                    missao.setConcluida(concluidaPeloUsuario); // Assumindo que sua classe Missao tem um método setConcluida(boolean)
-                    // ou que você pode passar isso no construtor.
-                }
-                listaMissoes.add(missao);
+                        Missao missao = new Missao(idOriginal, descricao, pontos, area, iconId);
+
+                        if (idUsuarioLogado > 0) { // Verifica se o ID do usuário é válido
+                            // Chamada para o método que também gerencia seu open/close
+                            boolean concluidaPeloUsuario = isMissaoConcluidaPeloUsuario(idUsuarioLogado, idOriginal);
+                            missao.setConcluida(concluidaPeloUsuario);
+                        }
+                        listaMissoes.add(missao);
+                    } else {
+                        Log.w(TAG, "Índice de coluna não encontrado ao buscar missões por área.");
+                    }
+                } while (cursor.moveToNext());
             }
-        } catch (Exception e) { // Captura Exception mais genérica
+        } catch (Exception e) {
             Log.e(TAG, "Erro ao buscar missões por área para usuário: " + areaConhecimento, e);
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
+            close(); // Fecha a conexão aberta para esta operação
         }
         Log.d(TAG, "Carregadas " + listaMissoes.size() + " missões para a área: " + areaConhecimento + " (Usuário: " + idUsuarioLogado + ")");
         return listaMissoes;
     }
 
-    /**
-     * Marca uma missão como concluída por um usuário específico na tabela usuario_missoes.
-     * @param idUsuario O ID do usuário.
-     * @param idMissaoOriginal O ID original da missão (da tabela missoes).
-     * @return true se a inserção foi bem-sucedida, false caso contrário.
-     */
     public boolean marcarMissaoComoConcluidaPeloUsuario(long idUsuario, int idMissaoOriginal) {
-        if (!isOpen()) open();
-
         ContentValues values = new ContentValues();
         values.put(DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_USUARIO, idUsuario);
         values.put(DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_MISSAO_ORIGINAL, idMissaoOriginal);
         values.put(DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_DATA_CONCLUSAO, BancoDeDados.getCurrentDateTime());
+        long result = -1;
 
         try {
-            long result = database.insertWithOnConflict(
+            open(); // Abre a conexão para esta operação
+            result = database.insertWithOnConflict(
                     DatabaseContract.UsuarioMissaoEntry.TABLE_NAME,
                     null,
                     values,
-                    SQLiteDatabase.CONFLICT_IGNORE // Ignora se o par (id_usuario, id_missao_original) já existe
+                    SQLiteDatabase.CONFLICT_IGNORE
             );
             if (result != -1) {
                 Log.i(TAG, "Missão " + idMissaoOriginal + " marcada como concluída para usuário " + idUsuario);
                 return true;
             } else {
-                Log.w(TAG, "Missão " + idMissaoOriginal + " já estava marcada como concluída para usuário " + idUsuario + " ou erro.");
-                // Se CONFLICT_IGNORE, result é -1 se a linha já existe ou outro erro.
-                // Para saber se já existia, você pode tentar um select antes ou verificar se o erro é de constraint.
-                return isMissaoConcluidaPeloUsuario(idUsuario, idMissaoOriginal); // Confirma se realmente está lá
+                Log.w(TAG, "Missão " + idMissaoOriginal + " já estava marcada ou erro ao marcar para usuário " + idUsuario);
+                // Se já existia, CONFLICT_IGNORE retorna -1. Podemos verificar se está lá.
+                return isMissaoConcluidaPeloUsuario(idUsuario, idMissaoOriginal); // Confirma
             }
         } catch (Exception e) {
             Log.e(TAG, "Erro ao marcar missão " + idMissaoOriginal + " como concluída para usuário " + idUsuario, e);
             return false;
+        } finally {
+            close(); // Fecha a conexão aberta para esta operação
         }
     }
 
     public boolean desmarcarMissaoComoConcluidaPeloUsuario(long idUsuario, int idMissaoOriginal) {
-        if (!isOpen()) open();
-
         String whereClause = DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_USUARIO + " = ? AND " +
                 DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_MISSAO_ORIGINAL + " = ?";
         String[] whereArgs = {String.valueOf(idUsuario), String.valueOf(idMissaoOriginal)};
+        int rowsDeleted = 0;
 
         try {
-            int rowsDeleted = database.delete(
+            open(); // Abre a conexão para esta operação
+            rowsDeleted = database.delete(
                     DatabaseContract.UsuarioMissaoEntry.TABLE_NAME,
                     whereClause,
                     whereArgs
@@ -169,133 +162,100 @@ public class MissoesController {
                 Log.i(TAG, "Missão " + idMissaoOriginal + " desmarcada para usuário " + idUsuario);
                 return true;
             } else {
-                Log.w(TAG, "Missão " + idMissaoOriginal + " não estava marcada como concluída para usuário " + idUsuario + " ou erro ao desmarcar.");
-                // Se a missão não estava marcada, a operação de delete não afeta linhas, mas não é um erro.
-                return true; // Consideramos sucesso se não estava lá ou foi removida.
+                Log.w(TAG, "Missão " + idMissaoOriginal + " não estava marcada ou erro ao desmarcar para usuário " + idUsuario);
+                return false; // Se não deletou nada, é porque não existia a combinação
             }
         } catch (Exception e) {
             Log.e(TAG, "Erro ao desmarcar missão " + idMissaoOriginal + " para usuário " + idUsuario, e);
             return false;
+        } finally {
+            close(); // Fecha a conexão aberta para esta operação
         }
     }
 
-    /**
-     * Verifica se uma missão específica foi concluída por um usuário.
-     * @param idUsuario O ID do usuário.
-     * @param idMissaoOriginal O ID original da missão.
-     * @return true se a missão foi concluída pelo usuário, false caso contrário.
-     */
     public boolean isMissaoConcluidaPeloUsuario(long idUsuario, int idMissaoOriginal) {
-        if (!isOpen()) open();
         Cursor cursor = null;
+        boolean concluida = false;
         try {
+            open(); // Abre a conexão para esta operação
             String selection = DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_USUARIO + " = ? AND " +
                     DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_MISSAO_ORIGINAL + " = ?";
             String[] selectionArgs = {String.valueOf(idUsuario), String.valueOf(idMissaoOriginal)};
 
             cursor = database.query(
                     DatabaseContract.UsuarioMissaoEntry.TABLE_NAME,
-                    new String[]{DatabaseContract.UsuarioMissaoEntry._ID}, // Apenas verificar existência
-                    selection, selectionArgs, null, null, null, "1" // Limita a 1 resultado
+                    new String[]{DatabaseContract.UsuarioMissaoEntry._ID},
+                    selection, selectionArgs, null, null, null, "1"
             );
-            return cursor.getCount() > 0;
+            concluida = (cursor != null && cursor.getCount() > 0); // Adicionado null check para cursor
         } catch (Exception e) {
-            Log.e(TAG, "Erro ao verificar se missão " +idMissaoOriginal+ " foi concluída pelo usuário " + idUsuario, e);
-            return false;
+            Log.e(TAG, "Erro ao verificar se missão " + idMissaoOriginal + " foi concluída pelo usuário " + idUsuario, e);
         } finally {
-            if (cursor != null) cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
+            close(); // Fecha a conexão aberta para esta operação
         }
+        return concluida;
     }
 
-    /**
-     * Obtém o número total de missões cadastradas no sistema (na tabela missoes).
-     * @return O número total de missões.
-     */
     public int getNumeroTotalDeMissoesNoSistema() {
-        if (!isOpen()) open();
         Cursor cursor = null;
+        int count = 0;
         try {
+            open(); // Abre a conexão para esta operação
             cursor = database.rawQuery("SELECT COUNT(*) FROM " + DatabaseContract.MissaoEntry.TABLE_NAME, null);
-            if (cursor.moveToFirst()) {
-                return cursor.getInt(0);
+            if (cursor != null && cursor.moveToFirst()) { // Adicionado null check para cursor
+                count = cursor.getInt(0);
             }
         } catch (Exception e) {
             Log.e(TAG, "Erro ao contar todas as missões do sistema", e);
         } finally {
-            if (cursor != null) cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
+            close(); // Fecha a conexão aberta para esta operação
         }
-        return 0;
+        return count;
     }
 
-    /**
-     * Obtém o número de missões que um usuário específico concluiu (da tabela usuario_missoes).
-     * @param idUsuario O ID do usuário.
-     * @return O número de missões concluídas pelo usuário.
-     */
     public int getNumeroMissoesConcluidasPeloUsuario(long idUsuario) {
-        if (!isOpen()) open();
         Cursor cursor = null;
+        int count = 0;
         try {
+            open(); // Abre a conexão para esta operação
             String selection = DatabaseContract.UsuarioMissaoEntry.COLUMN_NAME_ID_USUARIO + " = ?";
             String[] selectionArgs = {String.valueOf(idUsuario)};
             cursor = database.query(
                     DatabaseContract.UsuarioMissaoEntry.TABLE_NAME,
-                    new String[]{"COUNT(" + DatabaseContract.UsuarioMissaoEntry._ID + ")"}, // Contar as entradas
+                    new String[]{"COUNT(" + DatabaseContract.UsuarioMissaoEntry._ID + ")"},
                     selection, selectionArgs, null, null, null
             );
-            if (cursor.moveToFirst()) {
-                return cursor.getInt(0);
+            if (cursor != null && cursor.moveToFirst()) { // Adicionado null check para cursor
+                count = cursor.getInt(0);
             }
         } catch (Exception e) {
             Log.e(TAG, "Erro ao contar missões concluídas pelo usuário " + idUsuario, e);
         } finally {
-            if (cursor != null) cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
+            close(); // Fecha a conexão aberta para esta operação
         }
-        return 0;
+        return count;
     }
 
-    /**
-     * Calcula o número de missões pendentes para um usuário específico.
-     * @param idUsuario O ID do usuário.
-     * @return O número de missões pendentes para o usuário.
-     */
+    // Este método não acessa o banco diretamente, mas chama outros que agora gerenciam open/close.
+    // Portanto, não precisa de open/close aqui.
     public int getNumeroMissoesPendentesParaUsuario(long idUsuario) {
-        int totalMissoesNoSistema = getNumeroTotalDeMissoesNoSistema();
-        int missoesConcluidasPeloUsuario = getNumeroMissoesConcluidasPeloUsuario(idUsuario);
+        int totalMissoesNoSistema = getNumeroTotalDeMissoesNoSistema(); // Já gerencia open/close
+        int missoesConcluidasPeloUsuario = getNumeroMissoesConcluidasPeloUsuario(idUsuario); // Já gerencia open/close
         int pendentes = totalMissoesNoSistema - missoesConcluidasPeloUsuario;
         Log.d(TAG, "Missões pendentes para usuário " + idUsuario + ": " + pendentes +
                 " (Total: " + totalMissoesNoSistema + ", Concluídas: " + missoesConcluidasPeloUsuario + ")");
-        return Math.max(0, pendentes); // Garante que não seja negativo
+        return Math.max(0, pendentes);
     }
 
-
-
-    /*
-    DAR A OPÇÃO DOS DOIS
-
-     * O método abaixo, updateStatusMissao, que estava no seu MissoesController original,
-     * atualiza um status GLOBAL da missão na tabela 'missoes'.
-     * Se o seu objetivo é marcar uma missão como concluída APENAS para um usuário,
-     * você deve usar o `marcarMissaoComoConcluidaPeloUsuario`.
-     * Mantenha este método se você tem um caso de uso para marcar uma missão como globalmente
-     * concluída/indisponível para todos. Caso contrário, para evitar confusão,
-     * ele pode ser removido ou renomeado para algo como `updateStatusGlobalDaMissao`.
-     * Por ora, vou comentá-lo para focar na lógica por usuário.
-
-    public int updateStatusMissao(long dbIdMissao, boolean concluida) {
-        ContentValues values = new ContentValues();
-        values.put(DatabaseContract.MissaoEntry.COLUMN_NAME_CONCLUIDA, concluida ? 1 : 0);
-
-        String selection = DatabaseContract.MissaoEntry._ID + " = ?"; // Cuidado: _ID da tabela missoes, não id_original
-        String[] selectionArgs = {String.valueOf(dbIdMissao)};
-
-        int count = database.update(
-                DatabaseContract.MissaoEntry.TABLE_NAME,
-                values,
-                selection,
-                selectionArgs);
-        Log.d(TAG_LOG, "Status GLOBAL da Missão (dbID " + dbIdMissao + ") atualizado para concluida=" + concluida + ". Linhas afetadas: " + count);
-        return count;
-    }
-    */
+    // O método updateStatusMissao (global) foi comentado por você,
+    // então não o incluirei aqui a menos que você queira refatorá-lo também.
 }

@@ -23,6 +23,8 @@ public class TelaLogin extends AppCompatActivity {
     private Button buttonLogin;
     private TextView textViewLinkCadastro;
     private UsuarioController usuarioController;
+
+    private TextView textViewEsqueceuSenha;
     private GerenciadorDeSessao gerenciadorDeSessao;
 
     private static final String TAG = "TelaLogin"; // Tag para logs (MainActivity -> TelaLogin)
@@ -57,14 +59,15 @@ public class TelaLogin extends AppCompatActivity {
             Log.e(TAG, "onCreate: Erro ao abrir o banco de dados!", e);
             Toast.makeText(this, "Erro crítico ao conectar com o banco de dados.", Toast.LENGTH_LONG).show();
             // Considere o que fazer aqui. Fechar o app pode ser uma opção se o DB for essencial.
-            // finish();
-            // return;
+            finish();
+            return;
         }
 
         editTextEmailLogin = findViewById(R.id.txtEmail);
         editTextSenhaLogin = findViewById(R.id.txtSenha);
         buttonLogin = findViewById(R.id.btEntrar);
         textViewLinkCadastro = findViewById(R.id.txtCadastro);
+        textViewEsqueceuSenha = findViewById(R.id.txtEsqueceuSenha);
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +85,18 @@ public class TelaLogin extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // --- Adicione este bloco de código para o clique no "Esqueceu a senha?" ---
+        textViewEsqueceuSenha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Link 'Esqueceu a senha?' clicado.");
+                // Crie um Intent para ir para a sua TelaEsqueceuSenha
+                Intent intent = new Intent(TelaLogin.this, TelaEsqueceuSenha.class); // <--- Certifique-se que o nome da sua classe é 'TelaEsqueceuSenha'
+                startActivity(intent);
+            }
+        });
+        // --- Fim do bloco de código ---
 
         // REMOVIDA a segunda lógica de verificação de SharedPreferences daqui.
     }

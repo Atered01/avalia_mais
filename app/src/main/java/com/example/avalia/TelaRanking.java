@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.avalia.adapters.RankingAdapter;
 import com.example.avalia.bancodedados.UsuarioController;
 import com.example.avalia.usuario.Usuario;
 

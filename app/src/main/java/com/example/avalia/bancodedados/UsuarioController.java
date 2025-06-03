@@ -39,9 +39,9 @@ public class UsuarioController {
     }
 
     public void close() {
-        if (dbHelper != null) {
-            dbHelper.close();
-            Log.d(TAG_LOG, "Banco de dados fechado.");
+        if (database != null && database.isOpen()) {
+            database.close();
+            Log.d(TAG_LOG, "Instância SQLiteDatabase fechada.");
         }
     }
 
@@ -164,8 +164,8 @@ public class UsuarioController {
      * @return Um objeto Usuario se encontrado, ou null caso contrário.
      */
     public Usuario getUsuarioPorId(long usuarioId) {
-        if (usuarioId == -1) {
-            Log.w(TAG_LOG, "Tentativa de buscar usuário com ID inválido: -1");
+        if (usuarioId <= 0) { // IDs geralmente são positivos
+            Log.w(TAG_LOG, "Tentativa de buscar usuário com ID inválido: " + usuarioId);
             return null;
         }
 
@@ -184,9 +184,8 @@ public class UsuarioController {
         Usuario usuario = null;
 
         try {
-            if (!isOpen()) {
-                open(); // Abre a conexão se estiver fechada
-            }
+            open(); // Abre a conexão para esta operação
+
             cursor = database.query(
                     DatabaseContract.UserEntry.TABLE_NAME,
                     projection,
@@ -195,31 +194,45 @@ public class UsuarioController {
                     null, null, null
             );
 
-            if (cursor.moveToFirst()) {
-                long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseContract.UserEntry._ID));
-                String nome = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.UserEntry.COLUMN_NAME_NOME_COMPLETO));
-                String emailDb = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.UserEntry.COLUMN_NAME_EMAIL));
-                String dataNasc = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.UserEntry.COLUMN_NAME_DATA_NASCIMENTO));
-                String cpfUser = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseContract.UserEntry.COLUMN_NAME_CPF));
-                int pontuacao = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseContract.UserEntry.COLUMN_NAME_PONTUACAO_TOTAL));
+            if (cursor != null && cursor.moveToFirst()) { // Adicionado null check para cursor
+                // Mapeamento seguro dos índices de coluna
+                int idIndex = cursor.getColumnIndex(DatabaseContract.UserEntry._ID);
+                int nomeIndex = cursor.getColumnIndex(DatabaseContract.UserEntry.COLUMN_NAME_NOME_COMPLETO);
+                int emailIndex = cursor.getColumnIndex(DatabaseContract.UserEntry.COLUMN_NAME_EMAIL);
+                int dataNascIndex = cursor.getColumnIndex(DatabaseContract.UserEntry.COLUMN_NAME_DATA_NASCIMENTO);
+                int cpfIndex = cursor.getColumnIndex(DatabaseContract.UserEntry.COLUMN_NAME_CPF);
+                int pontuacaoIndex = cursor.getColumnIndex(DatabaseContract.UserEntry.COLUMN_NAME_PONTUACAO_TOTAL);
 
-                usuario = new Usuario(id, nome, emailDb, dataNasc, cpfUser, pontuacao);
-                Log.d(TAG_LOG, "Usuário encontrado por ID: " + usuarioId + ", Nome: " + nome);
+                // Verificar se todos os índices são válidos
+                if (idIndex != -1 && nomeIndex != -1 && emailIndex != -1 && dataNascIndex != -1 &&
+                        cpfIndex != -1 && pontuacaoIndex != -1) {
+
+                    long id = cursor.getLong(idIndex);
+                    String nome = cursor.getString(nomeIndex);
+                    String emailDb = cursor.getString(emailIndex);
+                    String dataNasc = cursor.getString(dataNascIndex); // Pode ser null
+                    String cpfUser = cursor.getString(cpfIndex);       // Pode ser null
+                    int pontuacao = cursor.getInt(pontuacaoIndex);
+
+                    // Assumindo que seu construtor Usuario pode lidar com dataNasc e cpfUser nulos se for o caso
+                    usuario = new Usuario(id, nome, emailDb, dataNasc, cpfUser, pontuacao);
+                    Log.d(TAG_LOG, "Usuário encontrado por ID: " + usuarioId + ", Nome: " + nome);
+                } else {
+                    Log.e(TAG_LOG, "Um ou mais índices de coluna não foram encontrados ao buscar usuário por ID: " + usuarioId);
+                }
             } else {
                 Log.w(TAG_LOG, "Nenhum usuário encontrado com o ID: " + usuarioId);
             }
-        } catch (Exception e) {
+        } catch (Exception e) { // Captura Exception genérica para robustez
             Log.e(TAG_LOG, "Erro ao buscar usuário por ID: " + usuarioId, e);
         } finally {
             if (cursor != null) {
                 cursor.close();
             }
-            // Não feche a conexão aqui se ela foi aberta por outro método que ainda a utiliza.
-            // O gerenciamento de open/close deve ser cuidadoso. Geralmente abre no início da Activity/uso e fecha no final.
+            close(); // Fecha a conexão SQLiteDatabase aberta para esta operação
         }
         return usuario;
     }
-
     public boolean atualizarPontuacaoUsuario(long usuarioId, int pontosParaAdicionar) {
         // ... seu método atualizarPontuacaoUsuario (como antes, mas com verificação de isOpen()) ...
         if (!isOpen()) {
