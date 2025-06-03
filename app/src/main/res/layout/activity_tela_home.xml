@@ -18,7 +18,8 @@
         android:textStyle="bold"
         android:gravity="center"
         android:paddingTop="16dp"
-        android:paddingBottom="16dp" />
+        android:paddingBottom="16dp"
+        android:textColor="@color/black"/>
 
     <ImageView
         android:id="@+id/user_photo"
@@ -39,7 +40,8 @@
         android:gravity="center"
         android:padding="12dp"
         android:textColor="#555555"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -52,7 +54,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:background="#FFFFFF">
 
             <TextView
                 android:id="@+id/text_licoes"
@@ -82,7 +85,9 @@
             android:id="@+id/buttonHome" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Home" />
+            android:text="Home"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/blueDark"/>
 
         <Button
             android:id="@+id/buttonLicoes" android:layout_width="0dp"

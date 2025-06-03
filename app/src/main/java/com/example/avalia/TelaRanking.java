@@ -2,6 +2,7 @@ package com.example.avalia;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ public class TelaRanking extends AppCompatActivity {
 
     private static final String TAG = "TelaRankingActivity";
     private RecyclerView recyclerViewRanking;
+    private Button buttonVoltarRanking;
     private RankingAdapter rankingAdapter;
     private List<Usuario> listaRanking; // Usando a classe Usuario que já tem a pontuação
     private UsuarioController usuarioController;
@@ -29,6 +31,7 @@ public class TelaRanking extends AppCompatActivity {
 
         recyclerViewRanking = findViewById(R.id.recyclerViewRanking);
         recyclerViewRanking.setLayoutManager(new LinearLayoutManager(this));
+        buttonVoltarRanking = findViewById(R.id.buttonVoltarRanking);
 
         listaRanking = new ArrayList<>();
         rankingAdapter = new RankingAdapter(this, listaRanking); // Passa o contexto se o adapter precisar
@@ -42,6 +45,8 @@ public class TelaRanking extends AppCompatActivity {
             Log.e(TAG, "Erro ao abrir banco para carregar ranking", e);
             Toast.makeText(this, "Erro ao carregar ranking.", Toast.LENGTH_SHORT).show();
         }
+
+        buttonVoltarRanking.setOnClickListener(v -> finish());
 
         // Configurar botão voltar da Toolbar (se você adicionar uma Toolbar no XML)
         // Toolbar toolbar = findViewById(R.id.toolbarRanking);

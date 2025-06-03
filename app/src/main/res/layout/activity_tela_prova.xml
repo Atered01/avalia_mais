@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:id="@+id/telaProvaContainer"
@@ -22,13 +23,15 @@
             android:text="Nome da Prova"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp"
+            android:textColor="#000"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:textColor="#000">
 
             <TextView
                 android:id="@+id/textViewContadorQuestao"
@@ -36,7 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Questão: 1/10"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:textColor="#000"/>
 
             <TextView
                 android:id="@+id/textViewCronometro"
@@ -44,7 +48,8 @@
                 android:layout_height="wrap_content"
                 android:text="Tempo: 60:00"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="#000"/>
         </LinearLayout>
 
         <TextView
@@ -54,7 +59,8 @@
             android:text="Carregando enunciado da questão..."
             android:textSize="18sp"
             android:layout_marginBottom="16dp"
-            android:minLines="3"/>
+            android:minLines="3"
+            android:textColor="#000"/>
 
         <RadioGroup
             android:id="@+id/radioGroupAlternativas"
@@ -68,7 +74,8 @@
                 android:layout_height="wrap_content"
                 android:text="Alternativa A"
                 android:textSize="16sp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:textColor="#000"/>
 
             <RadioButton
                 android:id="@+id/radioButtonAlternativaB"
@@ -76,7 +83,8 @@
                 android:layout_height="wrap_content"
                 android:text="Alternativa B"
                 android:textSize="16sp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:textColor="#000"/>
 
             <RadioButton
                 android:id="@+id/radioButtonAlternativaC"
@@ -84,7 +92,8 @@
                 android:layout_height="wrap_content"
                 android:text="Alternativa C"
                 android:textSize="16sp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:textColor="#000"/>
 
             <RadioButton
                 android:id="@+id/radioButtonAlternativaD"
@@ -92,7 +101,8 @@
                 android:layout_height="wrap_content"
                 android:text="Alternativa D"
                 android:textSize="16sp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:textColor="#000"/>
 
             <RadioButton
                 android:id="@+id/radioButtonAlternativaE"
@@ -101,7 +111,8 @@
                 android:text="Alternativa E"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:textColor="#000"/>
         </RadioGroup>
 
         <Button
@@ -110,7 +121,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Próxima Questão"
-            android:layout_marginTop="24dp"/>
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/blueDark"
+            android:textColor="#FFFFFF"/>
 
     </LinearLayout>
 </ScrollView>

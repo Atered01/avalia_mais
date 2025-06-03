@@ -15,7 +15,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/textViewPosicaoRanking"
@@ -27,6 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:textColor="@color/black"
             tools:text="1." />
 
         <ImageView
@@ -66,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:textColor="?attr/colorPrimary"
+                android:textColor="@color/blueDark"
                 tools:text="1500 Pontos" />
         </LinearLayout>
 

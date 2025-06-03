@@ -13,7 +13,7 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:padding="16dp"
-    android:background="?attr/colorPrimary"
+    android:background="@color/blueDark"
     android:elevation="4dp">
 
     <ImageView
@@ -43,5 +43,18 @@
         android:paddingTop="8dp"
         android:clipToPadding="false"
         tools:listitem="@layout/item_ranking_usuario" />
+
+    <Button
+        android:id="@+id/buttonVoltarRanking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Voltar"
+        android:backgroundTint="@color/blueDark"
+        android:textColor="@android:color/white"/>
 
 </RelativeLayout>

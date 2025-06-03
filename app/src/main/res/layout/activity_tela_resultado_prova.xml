@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="24dp"
-    tools:context=".prova.TelaResultadoProva">
+    tools:context=".prova.TelaResultadoProva"
+    android:background="#FFFFFF">
 
     <TextView
         android:id="@+id/textViewTituloResultado"
@@ -15,7 +16,8 @@
         android:text="Resultado da Prova"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:textColor="@android:color/black"/>
 
     <TextView
         android:id="@+id/textViewNomeProvaResultado"
@@ -23,7 +25,8 @@
         android:layout_height="wrap_content"
         tools:text="Matemática e suas Tecnologias"
         android:textSize="20sp"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="24dp"
+        android:textColor="@android:color/black"/>
 
     <ImageView
         android:id="@+id/imageViewResultadoIcon"
@@ -40,7 +43,8 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/black"/>
 
     <TextView
         android:id="@+id/textViewPorcentagem"
@@ -57,6 +61,8 @@
         android:text="Voltar para o Início"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:backgroundTint="@color/blueDark"
+        android:textColor="@android:color/white"/>
 
 </LinearLayout>

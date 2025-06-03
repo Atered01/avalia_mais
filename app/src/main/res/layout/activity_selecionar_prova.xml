@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".prova.SelecionarProva">
+    tools:context=".prova.SelecionarProva"
+    android:background="#FFFFFF">
 
     <TextView
         android:id="@+id/textViewTituloSelecionarProva"
@@ -17,7 +18,8 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:textColor="#000"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProvas"
@@ -26,6 +28,7 @@
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_prova_selecao" />
+
     <ProgressBar
         android:id="@+id/progressBarSelecionarProva"
         style="?android:attr/progressBarStyle"
@@ -33,6 +36,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:visibility="gone" />
+
+    <Button
+        android:id="@+id/buttonVoltarSelecionarProva"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Voltar"
+        android:backgroundTint="@color/blueDark"
+        android:textColor="@android:color/white"/>
 
 
 </LinearLayout>

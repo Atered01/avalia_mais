@@ -3,6 +3,7 @@ package com.example.avalia.prova; // Ou o pacote onde você criou a Activity
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class SelecionarProva extends AppCompatActivity implements ProvaSelecaoAd
 
     private static final String TAG = "SelecionarProvaActivity";
 
+    private Button buttonVoltarSelecionarProva;
     private RecyclerView recyclerViewProvas;
     private ProvaSelecaoAdapter provaAdapter;
     private ProvaController provaController;
@@ -33,6 +35,7 @@ public class SelecionarProva extends AppCompatActivity implements ProvaSelecaoAd
         setContentView(R.layout.activity_selecionar_prova);
 
         recyclerViewProvas = findViewById(R.id.recyclerViewProvas);
+        buttonVoltarSelecionarProva = findViewById(R.id.buttonVoltarSelecionarProva);
         // progressBar = findViewById(R.id.progressBarSelecionarProva); // Descomente se for usar
 
         // Configurar o RecyclerView
@@ -46,6 +49,8 @@ public class SelecionarProva extends AppCompatActivity implements ProvaSelecaoAd
         provaController = new ProvaController(this);
 
         carregarProvas();
+
+        buttonVoltarSelecionarProva.setOnClickListener(v -> finish());
     }
 
     private void carregarProvas() {
