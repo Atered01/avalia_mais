@@ -11,6 +11,7 @@ public class GerenciadorDeSessao { // Nome da classe está correto
     private static final String PREF_USER_NOME = "userNome";
     private static final String PREF_USER_FOTO_URI = "userFotoUri"; // Chave para URI da foto
     private static final String PREF_IS_LOGGED_IN = "isLoggedIn";
+    private static final String KEY_CAMINHO_FOTO_PERFIL = "caminhoFotoPerfil";
 
 
     private SharedPreferences sharedPreferences;
@@ -47,6 +48,15 @@ public class GerenciadorDeSessao { // Nome da classe está correto
         return sharedPreferences.getString(PREF_USER_NOME, null);
     }
 
+
+    public void salvarCaminhoFotoPerfil(String caminhoArquivo) {
+        editor.putString(KEY_CAMINHO_FOTO_PERFIL, caminhoArquivo);
+        editor.apply();
+    }
+
+    public String getCaminhoFotoPerfil() {
+        return sharedPreferences.getString(KEY_CAMINHO_FOTO_PERFIL, null);
+    }
     public void salvarUriFotoPerfil(String uri) {
         editor.putString(PREF_USER_FOTO_URI + "_" + getUsuarioId(), uri);
         editor.apply();

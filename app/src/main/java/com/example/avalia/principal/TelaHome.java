@@ -35,7 +35,10 @@ import com.example.avalia.ranking.TelaRanking;
 import com.example.avalia.usuario.TelaLogin;
 import com.example.avalia.usuario.Usuario;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,9 @@ public class TelaHome extends AppCompatActivity {
 
     private TextView textWelcome;
     private ImageView userPhoto;
+
+    private static final String NOME_ARQUIVO_FOTO_PERFIL = "profile_pic.jpg";
+
     private TextView textLicoesInfo;
     private Button buttonHome, buttonLicoes, buttonProvas, buttonIa, buttonRanking;
 
@@ -104,21 +110,70 @@ public class TelaHome extends AppCompatActivity {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                        Uri imageUri = result.getData().getData();
-                        if (imageUri != null) {
+                        Uri imageUriOriginal = result.getData().getData();
+                        if (imageUriOriginal != null) {
                             try {
-                                InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                                userPhoto.setImageBitmap(bitmap);
-                                gerenciadorDeSessao.salvarUriFotoPerfil(imageUri.toString());
-                                Log.d(TAG, "Foto de perfil atualizada e URI salvo: " + imageUri.toString());
-                            } catch (FileNotFoundException e) {
-                                Log.e(TAG, "Arquivo da imagem não encontrado", e);
+                                // Copia a imagem para o armazenamento interno
+                                String caminhoArquivoInterno = salvarImagemNoArmazenamentoInterno(imageUriOriginal);
+
+                                if (caminhoArquivoInterno != null) {
+                                    // Carrega o Bitmap do arquivo interno para exibição imediata
+                                    Bitmap bitmap = BitmapFactory.decodeFile(caminhoArquivoInterno);
+                                    userPhoto.setImageBitmap(bitmap);
+
+                                    // Salva o CAMINHO do arquivo interno, não a URI original
+                                    gerenciadorDeSessao.salvarCaminhoFotoPerfil(caminhoArquivoInterno); // Novo método no GerenciadorDeSessao
+                                    Log.d(TAG, "Foto de perfil atualizada e caminho salvo: " + caminhoArquivoInterno);
+                                } else {
+                                    Toast.makeText(TelaHome.this, "Erro ao salvar a imagem.", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } catch (Exception e) { // Mudado para Exception genérica para pegar qualquer erro na cópia/salvamento
+                                Log.e(TAG, "Erro ao processar imagem selecionada", e);
                                 Toast.makeText(TelaHome.this, "Não foi possível carregar a imagem.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
                 });
+    }
+
+    private String salvarImagemNoArmazenamentoInterno(Uri uriOrigem) {
+        InputStream inputStream = null;
+        FileOutputStream fileOutputStream = null;
+        try {
+            inputStream = getContentResolver().openInputStream(uriOrigem);
+            if (inputStream == null) {
+                Log.e(TAG, "Não foi possível abrir InputStream para a URI: " + uriOrigem);
+                return null;
+            }
+
+            // Cria um arquivo no diretório interno do app
+            File arquivoFoto = new File(getFilesDir(), NOME_ARQUIVO_FOTO_PERFIL);
+            fileOutputStream = new FileOutputStream(arquivoFoto);
+
+            // Copia os bytes
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                fileOutputStream.write(buffer, 0, length);
+            }
+            Log.d(TAG, "Imagem copiada para: " + arquivoFoto.getAbsolutePath());
+            return arquivoFoto.getAbsolutePath(); // Retorna o caminho do arquivo salvo
+
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "Arquivo original não encontrado: " + uriOrigem, e);
+            return null;
+        } catch (IOException e) {
+            Log.e(TAG, "Erro de IO ao salvar imagem interna", e);
+            return null;
+        } finally {
+            try {
+                if (inputStream != null) inputStream.close();
+                if (fileOutputStream != null) fileOutputStream.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Erro ao fechar streams", e);
+            }
+        }
     }
 
     private void inicializarUI() {
@@ -175,21 +230,42 @@ public class TelaHome extends AppCompatActivity {
             Log.d(TAG, "Dados do usuário carregados: " + usuarioLogado.getNomeCompleto());
             textWelcome.setText("Bem vindo, " + usuarioLogado.getNomeCompleto() + "!");
 
-            String uriFotoSalva = gerenciadorDeSessao.getUriFotoPerfil();
-            if (uriFotoSalva != null && !uriFotoSalva.isEmpty()) {
-                try {
-                    Uri imageUri = Uri.parse(uriFotoSalva);
-                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                    userPhoto.setImageBitmap(bitmap);
-                } catch (FileNotFoundException e) {
-                    Log.e(TAG, "Arquivo da foto de perfil salva não encontrado", e);
-                    userPhoto.setImageResource(R.drawable.ic_launcher_foreground); // Placeholder
-                } catch (Exception e) {
-                    Log.e(TAG, "Erro ao carregar foto de perfil: ", e);
+//            String uriFotoSalva = gerenciadorDeSessao.getUriFotoPerfil();
+//            if (uriFotoSalva != null && !uriFotoSalva.isEmpty()) {
+//                try {
+//                    Uri imageUri = Uri.parse(uriFotoSalva);
+//                    InputStream inputStream = getContentResolver().openInputStream(imageUri);
+//                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+//                    userPhoto.setImageBitmap(bitmap);
+//                } catch (FileNotFoundException e) {
+//                    Log.e(TAG, "Arquivo da foto de perfil salva não encontrado", e);
+//                    userPhoto.setImageResource(R.drawable.ic_launcher_foreground); // Placeholder
+//                } catch (Exception e) {
+//                    Log.e(TAG, "Erro ao carregar foto de perfil: ", e);
+//                    userPhoto.setImageResource(R.drawable.ic_launcher_foreground); // Placeholder
+//                }
+//            } else {
+//                userPhoto.setImageResource(R.drawable.ic_launcher_foreground); // Placeholder
+//            }
+
+            String caminhoFotoSalva = gerenciadorDeSessao.getCaminhoFotoPerfil();
+            if (caminhoFotoSalva != null && !caminhoFotoSalva.isEmpty()) {
+                File arquivoFoto = new File(caminhoFotoSalva);
+                if (arquivoFoto.exists()) {
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeFile(caminhoFotoSalva);
+                        userPhoto.setImageBitmap(bitmap);
+                        Log.d(TAG, "Foto de perfil carregada do armazenamento interno: " + caminhoFotoSalva);
+                    } catch (Exception e) { // Pega qualquer exceção ao decodificar/setar
+                        Log.e(TAG, "Erro ao decodificar ou exibir a foto de perfil salva: " + caminhoFotoSalva, e);
+                        userPhoto.setImageResource(R.drawable.ic_launcher_foreground); // Placeholder
+                    }
+                } else {
+                    Log.w(TAG, "Arquivo da foto de perfil não encontrado no caminho: " + caminhoFotoSalva);
                     userPhoto.setImageResource(R.drawable.ic_launcher_foreground); // Placeholder
                 }
             } else {
+                Log.d(TAG, "Nenhum caminho para foto de perfil salvo.");
                 userPhoto.setImageResource(R.drawable.ic_launcher_foreground); // Placeholder
             }
 

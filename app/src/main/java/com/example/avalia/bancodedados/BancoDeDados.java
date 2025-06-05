@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class BancoDeDados extends SQLiteOpenHelper {
+
     // INCREMENTE A VERSÃO DO BANCO DE DADOS POR CAUSA DAS NOVAS TABELAS DE PROVAS
     public static final int DATABASE_VERSION = 8; // <<<<<<< ATUALIZADO DE 7 PARA 8
     public static final String DATABASE_NAME = "MissoesApp.db"; // Mantendo o seu nome de BD
