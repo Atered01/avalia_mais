@@ -9,6 +9,11 @@
     android:background="#FFFFFF"
     android:id="@+id/telaHome">
 
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1" />-->
+
     <TextView
         android:id="@+id/text_welcome"
         android:layout_width="match_parent"
@@ -85,33 +90,37 @@
             android:id="@+id/buttonHome" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Home"
             android:textColor="#FFFFFF"
-            android:backgroundTint="@color/blueDark"/>
+            android:backgroundTint="@color/blueDark"
+            android:drawableEnd="@drawable/ic_home"
+            />
 
         <Button
             android:id="@+id/buttonLicoes" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Lições" />
+            android:drawableEnd="@drawable/ic_licao"/>
 
         <Button
             android:id="@+id/buttonProvas" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Provas" />
+            android:drawableEnd="@drawable/ic_prova"/>
 
         <Button
             android:id="@+id/buttonIa" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="IA" />
+            android:drawableEnd="@drawable/ic_ia"
+            />
 
         <Button
-            android:id="@+id/buttonRanking" android:layout_width="0dp"
+            android:id="@+id/buttonRanking"
+            android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Ranking" />
+
+            android:drawableEnd="@drawable/leaderboard"/>
     </LinearLayout>
 
 </LinearLayout>
