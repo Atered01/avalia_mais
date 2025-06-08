@@ -6,7 +6,7 @@
     android:paddingBottom="4dp"
     android:paddingStart="8dp"
     android:paddingEnd="50dp"> <TextView
-    android:id="@+id/textViewMensagemBot"
+    android:id="@+id/textViewMensagem"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentStart="true"

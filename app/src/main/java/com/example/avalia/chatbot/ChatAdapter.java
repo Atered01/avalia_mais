@@ -6,22 +6,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.avalia.R;
-
 import java.util.List;
+import io.noties.markwon.Markwon;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MensagemViewHolder> {
 
-    private List<MensagemChat> listaMensagens;
+    private final List<MensagemChat> listaMensagens;
+    private final Markwon markwon;
 
-    public ChatAdapter(List<MensagemChat> listaMensagens) {
+    public ChatAdapter(List<MensagemChat> listaMensagens, Markwon markwon) {
         this.listaMensagens = listaMensagens;
+        this.markwon = markwon;
     }
 
-    // Este método é crucial para determinar qual layout usar (usuário ou bot)
     @Override
     public int getItemViewType(int position) {
+        // A lógica para inflar layouts diferentes continua a mesma
         return listaMensagens.get(position).getTipoMensagem();
     }
 
@@ -34,13 +35,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MensagemViewHo
         } else { // TIPO_BOT
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_mensagem_bot, parent, false);
         }
-        return new MensagemViewHolder(view, viewType); // Passa viewType para o ViewHolder
+        return new MensagemViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MensagemViewHolder holder, int position) {
         MensagemChat mensagem = listaMensagens.get(position);
-        holder.bind(mensagem);
+
+        // A lógica para aplicar o Markwon continua a mesma
+        if (mensagem.getTipoMensagem() == MensagemChat.TIPO_BOT) {
+            markwon.setMarkdown(holder.textViewMensagem, mensagem.getTexto());
+        } else {
+            holder.textViewMensagem.setText(mensagem.getTexto());
+        }
     }
 
     @Override
@@ -48,41 +55,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MensagemViewHo
         return listaMensagens != null ? listaMensagens.size() : 0;
     }
 
-    // ViewHolder para as mensagens
+    // >>> VIEWHOLDER SIMPLIFICADO <<<
     static class MensagemViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewMensagem; // Usaremos um ID genérico se os layouts usarem o mesmo ID para o TextView principal
+        TextView textViewMensagem;
 
-        public MensagemViewHolder(@NonNull View itemView, int viewType) {
+        public MensagemViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Encontra o TextView baseado no tipo de view, caso os IDs sejam diferentes
-            if (viewType == MensagemChat.TIPO_USUARIO) {
-                textViewMensagem = itemView.findViewById(R.id.textViewMensagemUsuario);
-            } else { // TIPO_BOT
-                textViewMensagem = itemView.findViewById(R.id.textViewMensagemBot);
-            }
-        }
-
-        public void bind(MensagemChat mensagem) {
-            if (textViewMensagem != null) {
-                textViewMensagem.setText(mensagem.getTexto());
-            }
+            // Agora só precisamos procurar por um único ID, que existe em ambos os layouts
+            textViewMensagem = itemView.findViewById(R.id.textViewMensagem);
         }
     }
 
-    // Método para adicionar uma nova mensagem à lista e notificar o adapter
     public void adicionarMensagem(MensagemChat mensagem) {
         if (listaMensagens != null) {
             listaMensagens.add(mensagem);
             notifyItemInserted(listaMensagens.size() - 1);
-        }
-    }
-
-    // Método para limpar todas as mensagens (útil se quiser reiniciar o chat)
-    public void limparMensagens() {
-        if (listaMensagens != null) {
-            int size = listaMensagens.size();
-            listaMensagens.clear();
-            notifyItemRangeRemoved(0, size);
         }
     }
 }

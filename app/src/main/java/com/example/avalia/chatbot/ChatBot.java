@@ -1,6 +1,9 @@
 package com.example.avalia.chatbot;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +42,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import io.noties.markwon.Markwon;
+
 public class ChatBot extends AppCompatActivity { // Renomeei para convenção
 
     private static final String TAG = "ChatBotActivity";
@@ -51,6 +56,7 @@ public class ChatBot extends AppCompatActivity { // Renomeei para convenção
     private ProgressBar progressBarIA;
 
     private ChatAdapter chatAdapter; // Nosso novo adapter
+    private Markwon markwon;
     private List<MensagemChat> listaMensagensChat; // Lista de objetos MensagemChat
     private ArrayList<String> descricoesMissoes;
 
@@ -71,6 +77,7 @@ public class ChatBot extends AppCompatActivity { // Renomeei para convenção
         }
         // Removido o ViewCompat.setOnApplyWindowInsetsListener se o padding já está tratado pelo layout
 
+        markwon = Markwon.create(this);
         perguntaEditText = findViewById(R.id.perguntaEditText);
         enviarButton = findViewById(R.id.enviarButton); // Se for ImageButton, o ID é o mesmo
         progressBarIA = findViewById(R.id.progressBarIA);
@@ -79,7 +86,7 @@ public class ChatBot extends AppCompatActivity { // Renomeei para convenção
         // Configuração do RecyclerView
         recyclerViewChat = findViewById(R.id.recyclerViewChat);
         listaMensagensChat = new ArrayList<>();
-        chatAdapter = new ChatAdapter(listaMensagensChat);
+        chatAdapter = new ChatAdapter(listaMensagensChat, markwon);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         // layoutManager.setStackFromEnd(true); // Descomente se quiser que a lista comece de baixo e role para cima
         recyclerViewChat.setLayoutManager(layoutManager);
@@ -115,7 +122,7 @@ public class ChatBot extends AppCompatActivity { // Renomeei para convenção
             enviarButton.setOnClickListener(v -> enviarMensagemUsuarioEProcessarComIA());
         }
 
-        adicionarMensagemBot("Olá! Sou o Avalia+, seu assistente de estudos. Como posso te ajudar?");
+        adicionarMensagemBot("Olá! Sou o Avalia+, seu assistente de estudos. ***Como posso te ajudar?***");
     }
 
     private void enviarMensagemUsuarioEProcessarComIA() {
@@ -142,28 +149,6 @@ public class ChatBot extends AppCompatActivity { // Renomeei para convenção
     }
 
     private void processarPerguntaUsuarioComIA(String pergunta) {
-        // ... (Lógica de construção do prompt e chamada à API Gemini como antes) ...
-        // ... (Usando GenerativeModelFutures.from(gm) etc.) ...
-
-        // No onSuccess do Futures.addCallback:
-        // ...
-        // runOnUiThread(() -> {
-        //     adicionarMensagemBot(finalRespostaDoBot); // Usa o método do adapter
-        //     if (progressBarIA != null) progressBarIA.setVisibility(View.GONE);
-        //     if (buttonEnviarMensagem != null) buttonEnviarMensagem.setEnabled(true);
-        // });
-        // ...
-
-        // No onFailure do Futures.addCallback:
-        // ...
-        // runOnUiThread(() -> {
-        //     adicionarMensagemBot("Erro ao contatar IA...");
-        //     if (progressBarIA != null) progressBarIA.setVisibility(View.GONE);
-        //     if (buttonEnviarMensagem != null) buttonEnviarMensagem.setEnabled(true);
-        // });
-        // ...
-
-        // Vou colar a parte do processarPerguntaUsuarioComIA completa para clareza:
         if (gm == null) { /* ... (código como antes) ... */ return;}
 
         StringBuilder promptContext = new StringBuilder("Você é um assistente de estudos para o ENEM chamado Avalia+, ...");
@@ -199,7 +184,7 @@ public class ChatBot extends AppCompatActivity { // Renomeei para convenção
                                         finishReasonString = firstCandidate.getFinishReason().toString();
                                         if (firstCandidate.getFinishReason() == FinishReason.SAFETY) {
                                             respostaBot = "Minha configuração de segurança me impede de responder a essa pergunta.";
-                                        } // ... outros FinishReason ...
+                                        }
                                     }
                                     // Fallback para partes do conteúdo
                                     if ((textFromResult == null || textFromResult.isEmpty()) && respostaBot.startsWith("Desculpe")) {
@@ -217,7 +202,10 @@ public class ChatBot extends AppCompatActivity { // Renomeei para convenção
                 }
                 final String finalResposta = respostaBot;
                 runOnUiThread(() -> {
+                    // >> A CHAMADA AQUI FOI SIMPLIFICADA
+                    // Passa a String com o markdown diretamente para o método
                     adicionarMensagemBot(finalResposta);
+
                     if (progressBarIA != null) progressBarIA.setVisibility(View.GONE);
                     if (enviarButton != null) enviarButton.setEnabled(true);
                 });
@@ -226,7 +214,9 @@ public class ChatBot extends AppCompatActivity { // Renomeei para convenção
             public void onFailure(@NonNull Throwable t) {
                 Log.e(TAG, "Falha ao gerar conteúdo do Gemini: ", t);
                 runOnUiThread(() -> {
+                    // MUDE ESTA LINHA para usar o método de formatação por consistência
                     adicionarMensagemBot("Bot: Desculpe, ocorreu um erro. (" + t.getMessage() + ")");
+
                     if (progressBarIA != null) progressBarIA.setVisibility(View.GONE);
                     if (enviarButton != null) enviarButton.setEnabled(true);
                 });
@@ -237,7 +227,9 @@ public class ChatBot extends AppCompatActivity { // Renomeei para convenção
 
     // ATUALIZADO: Este método agora usa o ChatAdapter
     private void adicionarMensagemBot(String texto) {
-        Log.d(TAG, "Bot respondeu: " + texto);
+        if (texto == null || texto.isEmpty()) return;
+        Log.d(TAG, "Bot respondeu (raw com markdown): " + texto);
+        // Usa a classe MensagemChat que agora espera uma String
         MensagemChat mensagemBot = new MensagemChat(texto, MensagemChat.TIPO_BOT);
         chatAdapter.adicionarMensagem(mensagemBot);
         if (chatAdapter.getItemCount() > 0) {

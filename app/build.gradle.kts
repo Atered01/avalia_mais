@@ -48,6 +48,7 @@ android {
     }
 // In your app/build.gradle.kts file
     dependencies {
+        implementation("io.noties.markwon:core:4.6.2")
         implementation("org.reactivestreams:reactive-streams:1.0.4")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
         implementation(libs.generativeai) // CORRETO

@@ -6,12 +6,11 @@ public class MensagemChat {
 
     private String texto;
     private int tipoMensagem;
-    private long timestamp; // Opcional: para ordenar ou exibir a hora da mensagem
+    private long timestamp;
 
     public MensagemChat(String texto, int tipoMensagem) {
         this.texto = texto;
         this.tipoMensagem = tipoMensagem;
-        this.timestamp = System.currentTimeMillis();
     }
 
     public String getTexto() {

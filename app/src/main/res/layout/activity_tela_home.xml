@@ -8,12 +8,6 @@
     android:padding="16dp"
     android:background="#FFFFFF"
     android:id="@+id/telaHome">
-
-<!--    <View-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1" />-->
-
     <TextView
         android:id="@+id/text_welcome"
         android:layout_width="match_parent"
@@ -99,18 +93,21 @@
             android:id="@+id/buttonLicoes" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blueDark"
             android:drawableEnd="@drawable/ic_licao"/>
 
         <Button
             android:id="@+id/buttonProvas" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blueDark"
             android:drawableEnd="@drawable/ic_prova"/>
 
         <Button
             android:id="@+id/buttonIa" android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/blueDark"
             android:drawableEnd="@drawable/ic_ia"
             />
 
@@ -119,8 +116,8 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-
-            android:drawableEnd="@drawable/leaderboard"/>
+            android:backgroundTint="@color/blueDark"
+            android:drawableEnd="@drawable/ic_ranking"/>
     </LinearLayout>
 
 </LinearLayout>
